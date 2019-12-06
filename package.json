@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
+    "watch": "watch 'yarn build' ./src",
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint"
@@ -10,10 +11,16 @@
   "dependencies": {
     "core-js": "^3.4.3",
     "element-resize-detector": "^1.1.15",
+    "flow-to-typescript": "^1.0.0",
     "interactjs": "^1.7.2",
     "vue": "^2.6.10"
   },
   "devDependencies": {
+    "@babel/plugin-proposal-export-default-from": "^7.7.4",
+    "@babel/plugin-proposal-export-namespace": "^7.0.0-beta.32",
+    "@babel/plugin-proposal-export-namespace-from": "^7.7.4",
+    "@babel/plugin-transform-flow-comments": "^7.7.4",
+    "@babel/preset-flow": "^7.7.4",
     "@vue/cli-plugin-babel": "^4.1.0",
     "@vue/cli-plugin-eslint": "^4.1.0",
     "@vue/cli-service": "^4.1.0",
