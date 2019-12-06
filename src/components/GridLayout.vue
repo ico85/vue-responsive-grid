@@ -38,11 +38,6 @@
             GridItem,
         },
         props: {
-            // If true, the container height swells and contracts to fit contents
-            autoSize: {
-                type: Boolean,
-                default: true
-            },
             colNum: {
                 type: Number,
                 default: 12
@@ -69,14 +64,6 @@
                 type: Boolean,
                 default: true
             },
-            isMirrored: {
-                type: Boolean,
-                default: false
-            },
-            useCssTransforms: {
-                type: Boolean,
-                default: true
-            },
             verticalCompact: {
                 type: Boolean,
                 default: true
@@ -84,10 +71,6 @@
             layout: {
                 type: Array,
                 required: true,
-            },
-            responsive: {
-                type: Boolean,
-                default: false
             },
             breakpoints:{
                 type: Object,
@@ -230,10 +213,6 @@
                 this.eventBus.$emit("setResizable", this.isResizable);
             },
             responsive() {
-                if (!this.responsive) {
-                    this.$emit('update:layout', this.originalLayout);
-                    this.eventBus.$emit("setColNum", this.colNum);
-                }
                 this.onWindowResize();
             },
             maxRows: function() {
@@ -281,7 +260,6 @@
                 this.eventBus.$emit("resizeEvent");
             },
             containerHeight: function () {
-                if (!this.autoSize) return;
                 return bottom(this.layout) * (this.rowHeight + this.margin[1]) + this.margin[1] + 'px';
             },
             dragEvent: function (eventName, id, x, y, h, w) {
@@ -370,7 +348,7 @@
                     });
                 }
 
-                if (this.responsive) this.responsiveGridLayout();
+                this.responsiveGridLayout();
 
                 compact(this.layout, this.verticalCompact);
                 this.eventBus.$emit("compact");
