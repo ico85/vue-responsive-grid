@@ -1,25 +1,21 @@
 
-const path = require('path');
+//const path = require('path');
 
 module.exports = {
     "configureWebpack": config => {
-        config.target = "web";
-        config.externals = {'vue': 'Vue'};
-        config.output.filename = "tiles.js";
-        config.entry.app = "./src/main/vue/main.js";
-        config.resolve.alias["@"] = path.resolve(__dirname, "src/main/vue");
-        config.resolve.alias["~"] = path.resolve(__dirname, "node_modules");
+        config.output.filename = "vue-grid-layout.js";
+        config.entry.app = "./src/index.js";
     },
-    "chainWebpack": config => {
-        config.optimization.delete('splitChunks');
-        config.plugins.delete('html');
-        config.plugins.delete('preload');
-        config.plugins.delete('prefetch');
-    },
-    "filenameHashing": false,
+  "chainWebpack": config => {
+    config.optimization.delete('splitChunks');
+    //config.plugins.delete('html');
+    //config.plugins.delete('preload');
+    //config.plugins.delete('prefetch');
+  },
+
     "css": {
         "extract": false
     },
-    "outputDir": "src/main/resources/META-INF/resources/modules/common/common/layout/tiles/js/vue"
+    "outputDir": "dist"
 };
 

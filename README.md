@@ -1,4 +1,4 @@
-# vue-cli-test
+# vue-responsive-grid
 
 ## Project setup
 ```

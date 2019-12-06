@@ -1,5 +1,5 @@
 {
-  "name": "vue-cli-test",
+  "name": "vue-responsive-grid",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -9,6 +9,8 @@
   },
   "dependencies": {
     "core-js": "^3.4.3",
+    "element-resize-detector": "^1.1.15",
+    "interactjs": "^1.7.2",
     "vue": "^2.6.10"
   },
   "devDependencies": {
@@ -22,5 +24,19 @@
     "node-sass": "^4.12.0",
     "sass-loader": "^8.0.0",
     "vue-template-compiler": "^2.6.10"
+  },
+  "eslintConfig": {
+    "root": true,
+    "env": {
+      "node": true
+    },
+    "extends": [
+      "plugin:vue/essential",
+      "eslint:recommended"
+    ],
+    "rules": {},
+    "parserOptions": {
+      "parser": "babel-eslint"
+    }
   }
 }
