@@ -75,22 +75,9 @@
       /*cols: {
        type: Number,
        required: true
-       },*/
-      /*containerWidth: {
-       type: Number,
-       required: true
-
-       },
-       rowHeight: {
-       type: Number,
-       required: true
        },
        margin: {
        type: Array,
-       required: true
-       },
-       maxRows: {
-       type: Number,
        required: true
        },*/
       isDraggable: {
@@ -161,11 +148,7 @@
     inject: ["eventBus"],
     data: function () {
       return {
-        cols: 1,
-        containerWidth: 100,
-        rowHeight: 30,
         margin: [10, 10],
-        maxRows: Infinity,
         draggable: null,
         resizable: null,
 
@@ -195,11 +178,6 @@
     created() {
       let self = this;
 
-      // Accessible refernces of functions for removing in beforeDestroy
-      self.updateWidthHandler = function (width) {
-        self.updateWidth(width);
-      };
-
       self.compactHandler = function (layout) {
         self.compact(layout);
       };
@@ -216,50 +194,24 @@
         }
       };
 
-      self.setRowHeightHandler = function (rowHeight) {
-        self.rowHeight = rowHeight;
-      };
-
-      self.setMaxRowsHandler = function (maxRows) {
-        self.maxRows = maxRows;
-      };
-
       self.directionchangeHandler = () => {
         this.compact();
       };
 
-      self.setColNum = (colNum) => {
-        self.cols = parseInt(colNum);
-      }
-
-      this.eventBus.$on('updateWidth', self.updateWidthHandler);
       this.eventBus.$on('compact', self.compactHandler);
       this.eventBus.$on('setDraggable', self.setDraggableHandler);
       this.eventBus.$on('setResizable', self.setResizableHandler);
-      this.eventBus.$on('setRowHeight', self.setRowHeightHandler);
-      this.eventBus.$on('setMaxRows', self.setMaxRowsHandler);
-      this.eventBus.$on('directionchange', self.directionchangeHandler);
-      this.eventBus.$on('setColNum', self.setColNum)
     },
     beforeDestroy: function () {
       let self = this;
       //Remove listeners
-      this.eventBus.$off('updateWidth', self.updateWidthHandler);
       this.eventBus.$off('compact', self.compactHandler);
       this.eventBus.$off('setDraggable', self.setDraggableHandler);
       this.eventBus.$off('setResizable', self.setResizableHandler);
-      this.eventBus.$off('setRowHeight', self.setRowHeightHandler);
-      this.eventBus.$off('setMaxRows', self.setMaxRowsHandler);
-      this.eventBus.$off('directionchange', self.directionchangeHandler);
-      this.eventBus.$off('setColNum', self.setColNum);
       this.interactObj.unset() // destroy interact intance
     },
     mounted: function () {
-      this.cols = this.$parent.colNum;
-      this.rowHeight = this.$parent.rowHeight;
-      this.containerWidth = this.$parent.width !== null ? this.$parent.width : 100;
       this.margin = this.$parent.margin !== undefined ? this.$parent.margin : [10, 10];
-      this.maxRows = this.$parent.maxRows;
       if (this.isDraggable === null) {
         this.draggable = this.$parent.isDraggable;
       } else {
@@ -285,19 +237,16 @@
       resizable: function () {
         this.tryMakeResizable();
       },
-      rowHeight: function () {
+      "$parent.rowHeight": function () {
         this.createStyle();
-        this.emitContainerResized();
       },
-      cols: function () {
+      "$parent.lastColCount": function () {
         this.tryMakeResizable();
         this.createStyle();
-        this.emitContainerResized();
       },
-      containerWidth: function () {
+      "$parent.width": function () {
         this.tryMakeResizable();
         this.createStyle();
-        this.emitContainerResized();
       },
       x: function (newVal) {
         this.innerX = newVal;
@@ -310,12 +259,10 @@
       h: function (newVal) {
         this.innerH = newVal
         this.createStyle();
-        // this.emitContainerResized();
       },
       w: function (newVal) {
         this.innerW = newVal;
         this.createStyle();
-        // this.emitContainerResized();
       },
       minH: function () {
         this.tryMakeResizable();
@@ -352,15 +299,14 @@
     },
     methods: {
       createStyle: function () {
-        if (this.x + this.w > this.cols) {
+        if (this.x + this.w > this.$parent.lastColCount) {
           this.innerX = 0;
-          this.innerW = (this.w > this.cols) ? this.cols : this.w
+          this.innerW = (this.w > this.$parent.lastColCount) ? this.$parent.lastColCount : this.w
         } else {
           this.innerX = this.x;
           this.innerW = this.w;
         }
         let pos = this.calcPosition(this.innerX, this.innerY, this.innerW, this.innerH);
-
 
         if (this.isDragging) {
           pos.top = this.dragging.top;
@@ -373,19 +319,6 @@
 
         this.style = setTransform(pos.top, pos.left, pos.width, pos.height);
 
-      },
-      emitContainerResized() {
-        // this.style has width and height with trailing 'px'. The
-        // resized event is without them
-        let styleProps = {};
-        for (let prop of ['width', 'height']) {
-          let val = this.style[prop];
-          let matches = val.match(/^(\d+)px$/);
-          if (!matches)
-            return;
-          styleProps[prop] = matches[1];
-        }
-        this.$emit("container-resized", this.i, this.h, this.w, styleProps.height, styleProps.width);
       },
       handleResize: function (event) {
         const position = getControlPosition(event);
@@ -529,12 +462,12 @@
         const colWidth = this.calcColWidth();
         return {
           left: Math.round(colWidth * x + (x + 1) * this.margin[0]),
-          top: Math.round(this.rowHeight * y + (y + 1) * this.margin[1]),
+          top: Math.round(this.$parent.rowHeight * y + (y + 1) * this.margin[1]),
           // 0 * Infinity === NaN, which causes problems with resize constriants;
           // Fix this if it occurs.
           // Note we do it here rather than later because Math.round(Infinity) causes deopt
           width: w === Infinity ? w : Math.round(colWidth * w + Math.max(0, w - 1) * this.margin[0]),
-          height: h === Infinity ? h : Math.round(this.rowHeight * h + Math.max(0, h - 1) * this.margin[1])
+          height: h === Infinity ? h : Math.round(this.$parent.rowHeight * h + Math.max(0, h - 1) * this.margin[1])
         };
 
       },
@@ -547,26 +480,17 @@
       calcXY(top, left) {
         const colWidth = this.calcColWidth();
 
-        // left = colWidth * x + margin * (x + 1)
-        // l = cx + m(x+1)
-        // l = cx + mx + m
-        // l - m = cx + mx
-        // l - m = x(c + m)
-        // (l - m) / (c + m) = x
-        // x = (left - margin) / (coldWidth + margin)
         let x = Math.round((left - this.margin[0]) / (colWidth + this.margin[0]));
-        let y = Math.round((top - this.margin[1]) / (this.rowHeight + this.margin[1]));
+        let y = Math.round((top - this.margin[1]) / (this.$parent.rowHeight + this.margin[1]));
 
-        // Capping
-        x = Math.max(Math.min(x, this.cols - this.innerW), 0);
-        y = Math.max(Math.min(y, this.maxRows - this.innerH), 0);
+        x = Math.max(Math.min(x, this.$parent.lastColCount - this.innerW), 0);
 
         return {x, y};
       },
-      // Helper for generating column width
+
       calcColWidth() {
-        const colWidth = (this.containerWidth - (this.margin[0] * (this.cols + 1))) / this.cols;
-        // console.log("### COLS=" + this.cols + " COL WIDTH=" + colWidth + " MARGIN " + this.margin[0]);
+        const colWidth = (this.$parent.width - (this.margin[0] * (this.$parent.lastColCount + 1))) / this.$parent.lastColCount;
+        // console.log("### COLS=" + this.$parent.lastColCount + " COL WIDTH=" + colWidth + " MARGIN " + this.margin[0]);
         return colWidth;
       },
 
@@ -577,24 +501,18 @@
        * @return {Object} w, h as grid units.
        */
       calcWH(height, width) {
+
         const colWidth = this.calcColWidth();
 
         // width = colWidth * w - (margin * (w - 1))
         // ...
         // w = (width + margin) / (colWidth + margin)
         let w = Math.round((width + this.margin[0]) / (colWidth + this.margin[0]));
-        let h = Math.round((height + this.margin[1]) / (this.rowHeight + this.margin[1]));
+        let h = Math.round((height + this.margin[1]) / (this.$parent.rowHeight + this.margin[1]));
 
         // Capping
-        w = Math.max(Math.min(w, this.cols - this.innerX), 0);
-        h = Math.max(Math.min(h, this.maxRows - this.innerY), 0);
+        w = Math.max(Math.min(w, this.$parent.lastColCount - this.innerX), 0);
         return {w, h};
-      },
-      updateWidth: function (width, colNum) {
-        this.containerWidth = width;
-        if (colNum !== undefined && colNum !== null) {
-          this.cols = colNum;
-        }
       },
       compact: function () {
         this.createStyle();

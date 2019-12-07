@@ -71,15 +71,13 @@ export function collides(l1: LayoutItem, l2: LayoutItem): boolean {
 }
 
 /**
- * Given a layout, compact it. This involves going down each y coordinate and removing gaps
+ * Given a layout, compact it vertically. This involves going down each y coordinate and removing gaps
  * between items.
  *
  * @param  {Array} layout Layout.
- * @param  {Boolean} verticalCompact Whether or not to compact the layout
- *   vertically.
  * @return {Array}       Compacted Layout.
  */
-export function compact(layout: Layout, verticalCompact: Boolean): Layout {
+export function compact(layout: Layout): Layout {
   const compareWith = [];
   // We go through the items by row and column.
   const sorted = sortLayoutItemsByRowCol(layout);
@@ -89,7 +87,7 @@ export function compact(layout: Layout, verticalCompact: Boolean): Layout {
   for (let i = 0, len = sorted.length; i < len; i++) {
     let l = sorted[i];
 
-    l = compactItem(compareWith, l, verticalCompact);
+    l = compactItem(compareWith, l);
 
     // Add to comparison array. We only collide with items before this one.
     compareWith.push(l);
@@ -107,13 +105,11 @@ export function compact(layout: Layout, verticalCompact: Boolean): Layout {
 /**
  * Compact an item in the layout.
  */
-export function compactItem(compareWith: Layout, l: LayoutItem, verticalCompact: boolean): LayoutItem {
-  if (verticalCompact) {
+export function compactItem(compareWith: Layout, l: LayoutItem): LayoutItem {
     // Move the element up as far as it can go without colliding.
     while (l.y > 0 && !getFirstCollision(compareWith, l)) {
       l.y--;
     }
-  }
 
   // Move it down, and keep moving it down if it's colliding.
   let collides;
@@ -308,13 +304,12 @@ export function sortLayoutItemsByRowCol(layout: Layout): Layout {
  *
  * @param  {Array}  initialLayout Layout passed in through props.
  * @param  {String} breakpoint    Current responsive breakpoint.
- * @param  {Boolean} verticalCompact Whether or not to compact the layout vertically.
  * @return {Array}                Working layout.
  */
 
 /*
 export function synchronizeLayoutWithChildren(initialLayout: Layout, children: Array<React.Element>|React.Element,
-                                              cols: number, verticalCompact: boolean): Layout {
+                                              cols: number): Layout {
   // ensure 'children' is always an array
   if (!Array.isArray(children)) {
     children = [children];
@@ -341,11 +336,7 @@ export function synchronizeLayoutWithChildren(initialLayout: Layout, children: A
         }
         // Validated; add it to the layout. Bottom 'y' possible is the bottom of the layout.
         // This allows you to do nice stuff like specify {y: Infinity}
-        if (verticalCompact) {
           newItem = cloneLayoutItem({...g, y: Math.min(bottom(layout), g.y), i: child.key});
-        } else {
-          newItem = cloneLayoutItem({...g, y: g.y, i: child.key});
-        }
       }
       // Nothing provided: ensure this is added to the bottom
       else {
@@ -357,7 +348,7 @@ export function synchronizeLayoutWithChildren(initialLayout: Layout, children: A
 
   // Correct the layout.
   layout = correctBounds(layout, {cols: cols});
-  layout = compact(layout, verticalCompact);
+  layout = compact(layout);
 
   return layout;
 }

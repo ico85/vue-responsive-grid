@@ -49,13 +49,11 @@ export function getColsFromBreakpoint(breakpoint: Breakpoint, cols: Breakpoints)
  * @param  {String} breakpoint New breakpoint.
  * @param  {String} breakpoint Last breakpoint (for fallback).
  * @param  {Number} cols       Column count at new breakpoint.
- * @param  {Boolean} verticalCompact Whether or not to compact the layout
- *   vertically.
  * @return {Array}             New layout.
  */
 export function findOrGenerateResponsiveLayout(orgLayout: Layout, layouts: ResponsiveLayout, breakpoints: Breakpoints,
                                                breakpoint: Breakpoint, lastBreakpoint: Breakpoint,
-                                               cols: number, verticalCompact: boolean): Layout {
+                                               cols: number): Layout {
   // If it already exists, just return it.
   if (layouts[breakpoint]) return cloneLayout(layouts[breakpoint]);
   // Find or generate the next layout
@@ -71,12 +69,12 @@ export function findOrGenerateResponsiveLayout(orgLayout: Layout, layouts: Respo
     }
   }
   layout = cloneLayout(layout || []); // clone layout so we don't modify existing items
-  return compact(correctBounds(layout, {cols: cols}), verticalCompact);
+  return compact(correctBounds(layout, {cols: cols}));
 }
 
 export function generateResponsiveLayout(layout: Layout, breakpoints: Breakpoints,
                                                breakpoint: Breakpoint, lastBreakpoint: Breakpoint,
-                                               cols: number, verticalCompact: boolean): Layout {
+                                               cols: number): Layout {
   // If it already exists, just return it.
   /*if (layouts[breakpoint]) return cloneLayout(layouts[breakpoint]);
   // Find or generate the next layout
@@ -91,7 +89,7 @@ export function generateResponsiveLayout(layout: Layout, breakpoints: Breakpoint
     }
   }*/
   layout = cloneLayout(layout || []); // clone layout so we don't modify existing items
-  return compact(correctBounds(layout, {cols: cols}), verticalCompact);
+  return compact(correctBounds(layout, {cols: cols}));
 }
 
 /**

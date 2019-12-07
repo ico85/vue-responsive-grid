@@ -50,18 +50,11 @@
       GridItem,
     },
     props: {
-      colNum: {
-        type: Number,
-        default: 12
-      },
       rowHeight: {
         type: Number,
         default: 150
       },
-      maxRows: {
-        type: Number,
-        default: Infinity
-      },
+      // TODO make responsive
       margin: {
         type: Array,
         default: function () {
@@ -73,10 +66,6 @@
         default: true
       },
       isResizable: {
-        type: Boolean,
-        default: true
-      },
-      verticalCompact: {
         type: Boolean,
         default: true
       },
@@ -113,6 +102,7 @@
         layouts: {}, // array to store all layouts from different breakpoints
         lastBreakpoint: null, // store last active breakpoint
         originalLayout: null, // store original Layout
+        lastColCount: null, // store last column count
       };
     },
     created() {
@@ -159,7 +149,7 @@
           //self.width = self.$el.offsetWidth;
           addWindowEventListener('resize', self.onWindowResize);
 
-          compact(self.layout, self.verticalCompact);
+          compact(self.layout);
 
           self.updateHeight();
           self.$nextTick(function () {
@@ -179,8 +169,6 @@
       width: function (newval, oldval) {
         const self = this;
         this.$nextTick(function () {
-          //this.$broadcast("updateWidth", this.width);
-          this.eventBus.$emit("updateWidth", this.width);
           if (oldval === null) {
             /*
                 If oldval == null is when the width has never been
@@ -212,12 +200,6 @@
       layout: function () {
         this.layoutUpdate();
       },
-      colNum: function (val) {
-        this.eventBus.$emit("setColNum", val);
-      },
-      rowHeight: function () {
-        this.eventBus.$emit("setRowHeight", this.rowHeight);
-      },
       isDraggable: function () {
         this.eventBus.$emit("setDraggable", this.isDraggable);
       },
@@ -226,9 +208,6 @@
       },
       responsive() {
         this.onWindowResize();
-      },
-      maxRows: function () {
-        this.eventBus.$emit("setMaxRows", this.maxRows);
       },
     },
     methods: {
@@ -255,8 +234,7 @@
             this.initResponsiveFeatures();
           }
 
-          compact(this.layout, this.verticalCompact);
-          this.eventBus.$emit("updateWidth", this.width);
+          compact(this.layout);
           this.updateHeight();
         }
       },
@@ -291,8 +269,6 @@
           this.$nextTick(function () {
             this.isDragging = true;
           });
-          //this.$broadcast("updateWidth", this.width);
-          this.eventBus.$emit("updateWidth", this.width);
         } else {
           this.$nextTick(function () {
             this.isDragging = false;
@@ -301,7 +277,7 @@
 
         // Move the element to the dragged location.
         this.layout = moveElement(this.layout, l, x, y, true);
-        compact(this.layout, this.verticalCompact);
+        compact(this.layout);
         // needed because vue can't detect changes on array element properties
         this.eventBus.$emit("compact");
         this.updateHeight();
@@ -327,8 +303,6 @@
           this.$nextTick(function () {
             this.isDragging = true;
           });
-          //this.$broadcast("updateWidth", this.width);
-          this.eventBus.$emit("updateWidth", this.width);
 
         } else {
           this.$nextTick(function () {
@@ -338,7 +312,7 @@
 
         this.responsiveGridLayout();
 
-        compact(this.layout, this.verticalCompact);
+        compact(this.layout);
         this.eventBus.$emit("compact");
         this.updateHeight();
 
@@ -363,7 +337,6 @@
           newBreakpoint,
           this.lastBreakpoint,
           newCols,
-          this.verticalCompact
         );
 
         // Store the new layout.
@@ -373,7 +346,7 @@
         this.$emit('update:layout', layout);
 
         this.lastBreakpoint = newBreakpoint;
-        this.eventBus.$emit("setColNum", getColsFromBreakpoint(newBreakpoint, this.cols));
+        this.lastColCount = newCols;
       },
 
       // clear all responsive layouts
