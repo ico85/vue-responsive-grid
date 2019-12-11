@@ -14,4 +14,4 @@ import GridLayout from './GridLayout.vue';
 });*/
 
 //export default VueGridLayout;
-export { GridLayout, GridItem };
+export default { GridLayout, GridItem };
