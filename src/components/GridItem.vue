@@ -72,14 +72,7 @@
   export default {
     name: "GridItem",
     props: {
-      /*cols: {
-       type: Number,
-       required: true
-       },
-       margin: {
-       type: Array,
-       required: true
-       },*/
+
       isDraggable: {
         type: Boolean,
         required: false,
@@ -176,52 +169,40 @@
       }
     },
     created() {
-      let self = this;
 
-      self.compactHandler = function (layout) {
-        self.compact(layout);
+      this.compactHandler = () => {
+        this.createStyle();
       };
 
-      self.setDraggableHandler = function (isDraggable) {
-        if (self.isDraggable === null) {
-          self.draggable = isDraggable;
+      this.setDraggableHandler = (isDraggable) =>  {
+        if (this.isDraggable === null) {
+          this.draggable = isDraggable;
         }
       };
 
-      self.setResizableHandler = function (isResizable) {
-        if (self.isResizable === null) {
-          self.resizable = isResizable;
+      this.setResizableHandler = (isResizable)  => {
+        if (this.isResizable === null) {
+          this.resizable = isResizable;
         }
       };
 
-      self.directionchangeHandler = () => {
-        this.compact();
-      };
-
-      this.eventBus.$on('compact', self.compactHandler);
-      this.eventBus.$on('setDraggable', self.setDraggableHandler);
-      this.eventBus.$on('setResizable', self.setResizableHandler);
+      this.eventBus.$on('compact', this.compactHandler);
+      this.eventBus.$on('setDraggable', this.setDraggableHandler);
+      this.eventBus.$on('setResizable', this.setResizableHandler);
     },
     beforeDestroy: function () {
-      let self = this;
       //Remove listeners
-      this.eventBus.$off('compact', self.compactHandler);
-      this.eventBus.$off('setDraggable', self.setDraggableHandler);
-      this.eventBus.$off('setResizable', self.setResizableHandler);
+      this.eventBus.$off('compact', this.compactHandler);
+      this.eventBus.$off('setDraggable', this.setDraggableHandler);
+      this.eventBus.$off('setResizable', this.setResizableHandler);
       this.interactObj.unset() // destroy interact intance
     },
     mounted: function () {
+
       this.margin = this.$parent.margin !== undefined ? this.$parent.margin : [10, 10];
-      if (this.isDraggable === null) {
-        this.draggable = this.$parent.isDraggable;
-      } else {
-        this.draggable = this.isDraggable;
-      }
-      if (this.isResizable === null) {
-        this.resizable = this.$parent.isResizable;
-      } else {
-        this.resizable = this.isResizable;
-      }
+      this.draggable = this.$parent.isDraggable;
+      this.resizable = this.$parent.isResizable;
+
       this.createStyle();
     },
     watch: {
@@ -299,6 +280,7 @@
     },
     methods: {
       createStyle: function () {
+
         if (this.x + this.w > this.$parent.lastColCount) {
           this.innerX = 0;
           this.innerW = (this.w > this.$parent.lastColCount) ? this.$parent.lastColCount : this.w
@@ -306,6 +288,7 @@
           this.innerX = this.x;
           this.innerW = this.w;
         }
+
         let pos = this.calcPosition(this.innerX, this.innerY, this.innerW, this.innerH);
 
         if (this.isDragging) {
@@ -435,6 +418,7 @@
             const coreEvent = createCoreData(this.lastX, this.lastY, x, y);
             newPosition.left = this.dragging.left + coreEvent.deltaX;
             newPosition.top = this.dragging.top + coreEvent.deltaY;
+
 //                        console.log("### drag => " + event.type + ", x=" + x + ", y=" + y);
 //                        console.log("### drag => " + event.type + ", deltaX=" + coreEvent.deltaX + ", deltaY=" + coreEvent.deltaY);
 //                        console.log("### drag end => " + JSON.stringify(newPosition));
@@ -513,9 +497,6 @@
         // Capping
         w = Math.max(Math.min(w, this.$parent.lastColCount - this.innerX), 0);
         return {w, h};
-      },
-      compact: function () {
-        this.createStyle();
       },
       tryMakeDraggable: function () {
         const self = this;

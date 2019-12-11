@@ -1,4 +1,5 @@
 // @flow
+
 export type LayoutItemRequired = { w: number, h: number, x: number, y: number, i: string };
 export type LayoutItem = LayoutItemRequired &
   {
@@ -7,20 +8,7 @@ export type LayoutItem = LayoutItemRequired &
     isDraggable?: ?boolean, isResizable?: ?boolean
   };
 export type Layout = Array<LayoutItem>;
-// export type Position = {left: number, top: number, width: number, height: number};
-/*
-export type DragCallbackData = {
-  node: HTMLElement,
-  x: number, y: number,
-  deltaX: number, deltaY: number,
-  lastX: number, lastY: number
-};
-*/
-// export type DragEvent = {e: Event} & DragCallbackData;
-export type Size = { width: number, height: number };
-// export type ResizeEvent = {e: Event, node: HTMLElement, size: Size};
 
-// const isProduction = process.env.NODE_ENV === 'production';
 /**
  * Return the bottom coordinate of the layout.
  *
@@ -36,37 +24,20 @@ export function bottom(layout: Layout): number {
   return max;
 }
 
-export function cloneLayout(layout: Layout): Layout {
-  const newLayout = Array(layout.length);
-  for (let i = 0, len = layout.length; i < len; i++) {
-    newLayout[i] = cloneLayoutItem(layout[i]);
-  }
-  return newLayout;
-}
-
-// Fast path to cloning, since this is monomorphic
-export function cloneLayoutItem(layoutItem: LayoutItem): LayoutItem {
-  /*return {
-    w: layoutItem.w, h: layoutItem.h, x: layoutItem.x, y: layoutItem.y, i: layoutItem.i,
-    minW: layoutItem.minW, maxW: layoutItem.maxW, minH: layoutItem.minH, maxH: layoutItem.maxH,
-    moved: Boolean(layoutItem.moved),
-    // These can be null
-    isDraggable: layoutItem.isDraggable, isResizable: layoutItem.isResizable
-  };*/
-  return JSON.parse(JSON.stringify(layoutItem));
-}
-
 /**
  * Given two layoutitems, check if they collide.
  *
  * @return {Boolean}   True if colliding.
  */
 export function collides(l1: LayoutItem, l2: LayoutItem): boolean {
+
   if (l1 === l2) return false; // same element
+
   if (l1.x + l1.w <= l2.x) return false; // l1 is left of l2
   if (l1.x >= l2.x + l2.w) return false; // l1 is right of l2
   if (l1.y + l1.h <= l2.y) return false; // l1 is above l2
   if (l1.y >= l2.y + l2.h) return false; // l1 is below l2
+
   return true; // boxes overlap
 }
 
@@ -78,6 +49,7 @@ export function collides(l1: LayoutItem, l2: LayoutItem): boolean {
  * @return {Array}       Compacted Layout.
  */
 export function compact(layout: Layout): Layout {
+
   const compareWith = [];
   // We go through the items by row and column.
   const sorted = sortLayoutItemsByRowCol(layout);
@@ -86,6 +58,8 @@ export function compact(layout: Layout): Layout {
 
   for (let i = 0, len = sorted.length; i < len; i++) {
     let l = sorted[i];
+
+    if(l.y < 0) { l.y = 0;}
 
     l = compactItem(compareWith, l);
 
@@ -106,10 +80,10 @@ export function compact(layout: Layout): Layout {
  * Compact an item in the layout.
  */
 export function compactItem(compareWith: Layout, l: LayoutItem): LayoutItem {
-    // Move the element up as far as it can go without colliding.
-    while (l.y > 0 && !getFirstCollision(compareWith, l)) {
-      l.y--;
-    }
+  // Move the element up as far as it can go without colliding.
+  while (l.y > 0 && !getFirstCollision(compareWith, l)) {
+    l.y--;
+  }
 
   // Move it down, and keep moving it down if it's colliding.
   let collides;
@@ -125,21 +99,25 @@ export function compactItem(compareWith: Layout, l: LayoutItem): LayoutItem {
  * @param  {Array} layout Layout array.
  * @param  {Number} bounds Number of columns.
  */
-export function correctBounds(layout: Layout, bounds: { cols: number }): Layout {
+export function correctBounds(layout: Layout, cols: number): Layout {
+  if (cols === null) return [];
   const collidesWith = [];
+
   for (let i = 0, len = layout.length; i < len; i++) {
     const l = layout[i];
     // Overflows right
-    if (l.x + l.w > bounds.cols) l.x = bounds.cols - l.w;
+    if (l.x + l.w > cols) l.x = cols - l.w;
     // Overflows left
     if (l.x < 0) {
       l.x = 0;
-      l.w = bounds.cols;
+      l.w = cols;
     }
 
-   collidesWith.push(l);
+    collidesWith.push(l);
 
   }
+
+  console.log("returnining layout", layout);
   return layout;
 }
 
@@ -298,93 +276,11 @@ export function sortLayoutItemsByRowCol(layout: Layout): Layout {
   });
 }
 
-/**
- * Generate a layout using the initialLayout and children as a template.
- * Missing entries will be added, extraneous ones will be truncated.
- *
- * @param  {Array}  initialLayout Layout passed in through props.
- * @param  {String} breakpoint    Current responsive breakpoint.
- * @return {Array}                Working layout.
- */
-
-/*
-export function synchronizeLayoutWithChildren(initialLayout: Layout, children: Array<React.Element>|React.Element,
-                                              cols: number): Layout {
-  // ensure 'children' is always an array
-  if (!Array.isArray(children)) {
-    children = [children];
-  }
-  initialLayout = initialLayout || [];
-
-  // Generate one layout item per child.
-  let layout: Layout = [];
-  for (let i = 0, len = children.length; i < len; i++) {
-    let newItem;
-    const child = children[i];
-
-    // Don't overwrite if it already exists.
-    const exists = getLayoutItem(initialLayout, child.key || "1" /!* FIXME satisfies Flow *!/);
-    if (exists) {
-      newItem = exists;
-    } else {
-      const g = child.props._grid;
-
-      // Hey, this item has a _grid property, use it.
-      if (g) {
-        if (!isProduction) {
-          validateLayout([g], 'ReactGridLayout.children');
-        }
-        // Validated; add it to the layout. Bottom 'y' possible is the bottom of the layout.
-        // This allows you to do nice stuff like specify {y: Infinity}
-          newItem = cloneLayoutItem({...g, y: Math.min(bottom(layout), g.y), i: child.key});
-      }
-      // Nothing provided: ensure this is added to the bottom
-      else {
-        newItem = cloneLayoutItem({w: 1, h: 1, x: 0, y: bottom(layout), i: child.key || "1"});
-      }
-    }
-    layout[i] = newItem;
-  }
-
-  // Correct the layout.
-  layout = correctBounds(layout, {cols: cols});
-  layout = compact(layout);
-
-  return layout;
-}
-*/
-
-/**
- * Validate a layout. Throws errors.
- *
- * @param  {Array}  layout        Array of layout items.
- * @param  {String} [contextName] Context name for errors.
- * @throw  {Error}                Validation error.
- */
-export function validateLayout(layout: Layout, contextName: string): void {
-  contextName = contextName || "Layout";
-  const subProps = ['x', 'y', 'w', 'h'];
-  if (!Array.isArray(layout)) throw new Error(contextName + " must be an array!");
-  for (let i = 0, len = layout.length; i < len; i++) {
-    const item = layout[i];
-    for (let j = 0; j < subProps.length; j++) {
-      if (typeof item[subProps[j]] !== 'number') {
-        throw new Error('VueGridLayout: ' + contextName + '[' + i + '].' + subProps[j] + ' must be a number!');
-      }
-    }
-    if (item.i && typeof item.i !== 'string') {
-      // number is also ok, so comment the error
-      // TODO confirm if commenting the line below doesn't cause unexpected problems
-      // throw new Error('VueGridLayout: ' + contextName + '[' + i + '].i must be a string!');
-    }
-  }
-}
 
 // Flow can't really figure this out, so we just use Object
 export function autoBindHandlers(el: Object, fns: Array<string>): void {
   fns.forEach((key) => el[key] = el[key].bind(el));
 }
-
 
 /**
  * Convert a JS object to CSS string. Similar to React's output of CSS.
