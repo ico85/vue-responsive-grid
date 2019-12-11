@@ -6,8 +6,10 @@
     "watch": "watch 'yarn build' ./src",
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
+    "build-lib": "vue-cli-service build --target lib ./src/components/index.js",
     "lint": "vue-cli-service lint"
   },
+
   "dependencies": {
     "core-js": "^3.4.3",
     "element-resize-detector": "^1.1.15",
@@ -16,6 +18,7 @@
     "vue": "^2.6.10",
     "watch": "^1.0.2"
   },
+  "main": "dist/vue-responsive-grid.common.js",
   "devDependencies": {
     "@babel/plugin-proposal-export-default-from": "^7.7.4",
     "@babel/plugin-proposal-export-namespace": "^7.0.0-beta.32",

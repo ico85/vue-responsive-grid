@@ -5,6 +5,7 @@ module.exports = {
     "configureWebpack": config => {
         config.output.filename = "vue-grid-layout.js";
         config.entry.app = "./src/index.js";
+        config.output.libraryExport = "default";
     },
   "chainWebpack": config => {
     config.optimization.delete('splitChunks');
@@ -16,6 +17,5 @@ module.exports = {
     "css": {
         "extract": false
     },
-    "outputDir": "dist"
 };
 
