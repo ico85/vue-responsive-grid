@@ -34,11 +34,10 @@
     compact,
     correctBounds,
     getLayoutItem,
-    moveElement,
+    moveElement
   } from '../helpers/utils';
   import {
-    getBreakpointFromWidth,
-    getColsFromBreakpoint,
+    sortBreakpoints
   } from "../helpers/responsiveUtils";
   //var eventBus = require('./eventBus');
 
@@ -56,9 +55,9 @@
       GridItem
     },
     props: {
-      rowHeight: {
+      itemRatio: {
         type: Number,
-        default: 35
+        default: 1,
       },
       // TODO make responsive
       margin: {
@@ -87,15 +86,11 @@
           return {lg: 1200, md: 996, sm: 768, xs: 480, xxs: 0}
         }
       },
-      cols: {
-        type: Object,
-        default: function () {
-          return {lg: 12, md: 10, sm: 6, xs: 4, xxs: 2}
-        },
-      },
     },
-    data: function () {
+    data() {
       return {
+        cols: {},
+        rowHeight: 60,
         width: null,
         mergedStyle: {},
         isDragging: false,
@@ -106,15 +101,11 @@
           h: 0,
           i: -1
         },
-        layouts: {}, // array to store all layouts from different breakpoints
-        lastBreakpoint: null, // store last active breakpoint
-        lastColCount: null, // store last column count
+        layouts: {},
       };
     },
     created() {
 
-
-      // Accessible refernces of functions for removing in beforeDestroy
       this.resizeEventHandler = (eventType, i, x, y, h, w) => {
         this.resizeEvent(eventType, i, x, y, h, w);
       };
@@ -138,7 +129,7 @@
 
         for (let i = 0; i < layoutEntries.length; i++) {
           let items = layoutEntries[i][1];
-          items.push(Object.assign({},layout));
+          items.push(Object.assign({}, layout));
         }
 
       });
@@ -152,6 +143,8 @@
       this.erd.uninstall(this.$refs.item);
     },
     mounted: function () {
+
+      this.calcColWidths();
 
       this.layouts = Object.assign({}, this.responsiveLayouts);
 
@@ -176,15 +169,26 @@
           return this.layouts[this.lastBreakpoint] || [];
         },
         set(newLayout) {
-          console.log("sedding nju layout");
           this.layouts[this.lastBreakpoint] = newLayout;
         }
+      },
+      currentColCount() {
+        return this.cols[this.lastBreakpoint];
+      },
+      lastBreakpoint() {
+        const sorted = sortBreakpoints(this.breakpoints);
+        let matching = sorted[0];
+        for (let i = 1, len = sorted.length; i < len; i++) {
+          const breakpointName = sorted[i];
+          if (this.width > this.breakpoints[breakpointName])
+            matching = breakpointName;
+        }
+        return matching;
       },
     },
     watch: {
       width: function (newWidth, oldWidth) {
-        this.lastBreakpoint = getBreakpointFromWidth(this.breakpoints, newWidth);
-        this.lastColCount = getColsFromBreakpoint(this.lastBreakpoint, this.cols);
+        this.rowHeight = ((this.width - (this.margin[0] * (this.currentColCount + 1))) / this.currentColCount) * this.itemRatio;
 
         this.$nextTick(() => {
           if (oldWidth === null) {
@@ -198,8 +202,7 @@
       },
       layout: function () {
 
-        console.log("lastColCount", this.lastColCount);
-        compact(correctBounds(this.layout, this.lastColCount));
+        compact(correctBounds(this.layout, this.currentColCount));
         this.updateHeight();
       },
       isDraggable: function () {
@@ -210,6 +213,41 @@
       },
     },
     methods: {
+
+
+      calcColWidths() {
+
+        // TODO as prop
+        const minColWidth = 60;
+
+        let breakpointEntries = Object.entries(this.breakpoints);
+        let margin = this.margin[0];
+        let cols = {};
+
+        for (let i = 0; i < breakpointEntries.length; i++) {
+
+          let colsCount = 40;
+          let colWidth = 0;
+
+          let breakpointLabel = breakpointEntries[i][0];
+          let breakpointSize = breakpointEntries[i][1];
+
+          while (colWidth < minColWidth && colsCount >= 2) {
+            colsCount--;
+            colWidth = (breakpointSize - (margin * (colsCount + 1))) / colsCount;
+          }
+
+          if(colsCount % 2 !== 0 && colsCount > 2) {
+            colsCount--;
+          }
+
+          cols[breakpointLabel] = colsCount;
+        }
+
+        this.cols = cols;
+
+      },
+
       updateHeight: function () {
         this.mergedStyle = {
           height: this.containerHeight()
@@ -246,7 +284,7 @@
         // Move the element to the dragged location.
         moveElement(this.layout, l, x, y, true);
 
-        compact(correctBounds(this.layout, this.lastColCount));
+        compact(correctBounds(this.layout, this.currentColCount));
         // needed because vue can't detect changes on array element properties
         this.eventBus.$emit("compact");
         this.updateHeight();
@@ -280,7 +318,7 @@
           });
         }
 
-        compact(correctBounds(this.layout, this.lastColCount));
+        compact(correctBounds(this.layout, this.currentColCount));
         this.eventBus.$emit("compact");
         this.updateHeight();
 

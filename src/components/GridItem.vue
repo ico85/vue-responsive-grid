@@ -221,7 +221,7 @@
       "$parent.rowHeight": function () {
         this.createStyle();
       },
-      "$parent.lastColCount": function () {
+      "$parent.currentColCount": function () {
         this.tryMakeResizable();
         this.createStyle();
       },
@@ -281,9 +281,9 @@
     methods: {
       createStyle: function () {
 
-        if (this.x + this.w > this.$parent.lastColCount) {
+        if (this.x + this.w > this.$parent.currentColCount) {
           this.innerX = 0;
-          this.innerW = (this.w > this.$parent.lastColCount) ? this.$parent.lastColCount : this.w
+          this.innerW = (this.w > this.$parent.currentColCount) ? this.$parent.currentColCount : this.w
         } else {
           this.innerX = this.x;
           this.innerW = this.w;
@@ -467,14 +467,14 @@
         let x = Math.round((left - this.margin[0]) / (colWidth + this.margin[0]));
         let y = Math.round((top - this.margin[1]) / (this.$parent.rowHeight + this.margin[1]));
 
-        x = Math.max(Math.min(x, this.$parent.lastColCount - this.innerW), 0);
+        x = Math.max(Math.min(x, this.$parent.currentColCount - this.innerW), 0);
 
         return {x, y};
       },
 
       calcColWidth() {
-        const colWidth = (this.$parent.width - (this.margin[0] * (this.$parent.lastColCount + 1))) / this.$parent.lastColCount;
-        // console.log("### COLS=" + this.$parent.lastColCount + " COL WIDTH=" + colWidth + " MARGIN " + this.margin[0]);
+        const colWidth = (this.$parent.width - (this.margin[0] * (this.$parent.currentColCount + 1))) / this.$parent.currentColCount;
+        // console.log("### COLS=" + this.$parent.currentColCount + " COL WIDTH=" + colWidth + " MARGIN " + this.margin[0]);
         return colWidth;
       },
 
@@ -495,7 +495,7 @@
         let h = Math.round((height + this.margin[1]) / (this.$parent.rowHeight + this.margin[1]));
 
         // Capping
-        w = Math.max(Math.min(w, this.$parent.lastColCount - this.innerX), 0);
+        w = Math.max(Math.min(w, this.$parent.currentColCount - this.innerX), 0);
         return {w, h};
       },
       tryMakeDraggable: function () {

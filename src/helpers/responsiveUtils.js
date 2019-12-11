@@ -24,20 +24,6 @@ export function getBreakpointFromWidth(breakpoints: Breakpoints, width: number):
 
 
 /**
- * Given a breakpoint, get the # of cols set for it.
- * @param  {String} breakpoint Breakpoint name.
- * @param  {Object} cols       Map of breakpoints to cols.
- * @return {Number}            Number of cols.
- */
-export function getColsFromBreakpoint(breakpoint: Breakpoint, cols: Breakpoints): number {
-  if (!cols[breakpoint]) {
-    throw new Error("ResponsiveGridLayout: `cols` entry for breakpoint " + breakpoint + " is missing!");
-  }
-  return cols[breakpoint];
-}
-
-
-/**
  * Given breakpoints, return an array of breakpoints sorted by width. This is usually
  * e.g. ['xxs', 'xs', 'sm', ...]
  *

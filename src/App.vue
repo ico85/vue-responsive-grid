@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <grid-layout ref="gridLayout" :cols="cols" :responsiveLayouts="responsiveLayouts" :breakpoints="breakpoints"></grid-layout>
+    <grid-layout ref="gridLayout" :responsiveLayouts="responsiveLayouts" :breakpoints="breakpoints"></grid-layout>
 
     <button @click="addGridItem()">ADD</button>
   </div>
@@ -15,7 +15,6 @@ export default {
   data() {
     return {
       breakpoints: {lg: 1200, md: 996, sm: 768, xs: 480, xxs: 320},
-      cols: {lg: 17, md: 10, sm: 6, xs: 4, xxs: 2},
       responsiveLayouts: {"lg":[{"x":2,"y":0,"w":1,"h":3,"i":0},{"x":1,"y":0,"w":1,"h":2,"i":1},{"x":0,"y":0,"w":1,"h":1,"i":2}],"md":[{"x":2,"y":0,"w":1,"h":3,"i":0},{"x":1,"y":0,"w":1,"h":4,"i":1},{"x":0,"y":0,"w":1,"h":5,"i":2}],"sm":[{"x":3,"y":0,"w":1,"h":6,"i":0},{"x":1,"y":0,"w":2,"h":7,"i":1},{"x":0,"y":0,"w":1,"h":6,"i":2}],"xs":[{"x":1,"y":2,"w":1,"h":1,"i":0},{"x":2,"y":0,"w":1,"h":1,"i":1},{"x":1,"y":0,"w":1,"h":2,"i":2}],"xxs":[{"x":1,"y":3,"w":1,"h":3,"i":0},{"x":1,"y":0,"w":1,"h":3,"i":1},{"x":0,"y":0,"w":1,"h":6,"i":2}]}
     }
   },

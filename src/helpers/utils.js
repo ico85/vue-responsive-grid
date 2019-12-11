@@ -117,7 +117,6 @@ export function correctBounds(layout: Layout, cols: number): Layout {
 
   }
 
-  console.log("returnining layout", layout);
   return layout;
 }
 
