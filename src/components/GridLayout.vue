@@ -146,7 +146,7 @@
 
       this.calcColWidths();
 
-      this.layouts = Object.assign({}, this.responsiveLayouts);
+      this.layouts = this.responsiveLayouts;
 
       this.$nextTick(() => {
 
@@ -187,6 +187,9 @@
       },
     },
     watch: {
+      responsiveLayouts(newLayouts) {
+        this.layouts = newLayouts;
+      },
       width: function (newWidth, oldWidth) {
         this.rowHeight = ((this.width - (this.margin[0] * (this.currentColCount + 1))) / this.currentColCount) * this.itemRatio;
 
