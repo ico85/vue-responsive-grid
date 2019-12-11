@@ -1,13 +1,12 @@
 <template>
   <div ref="item" class="vue-grid-layout" :style="mergedStyle">
-    <grid-item v-for="item in layout"
+    <grid-item v-for="item in layout" ref="gridItem"
                :key="item.i"
                :x="item.x"
                :y="item.y"
                :w="item.w"
                :h="item.h"
                :i="item.i">
-      {{item.i}}
     </grid-item>
     <grid-item class="vue-grid-placeholder"
                v-show="isDragging"
@@ -15,7 +14,9 @@
                :y="placeholder.y"
                :w="placeholder.w"
                :h="placeholder.h"
-               :i="placeholder.i"></grid-item>
+               :i="placeholder.i">
+
+    </grid-item>
   </div>
 </template>
 <style>

@@ -1,6 +1,7 @@
 <template>
   <div id="app">
-    <grid-layout ref="gridLayout" :responsiveLayouts="responsiveLayouts" :breakpoints="breakpoints"></grid-layout>
+    <grid-layout ref="gridLayout" :responsiveLayouts="responsiveLayouts" :breakpoints="breakpoints">
+    </grid-layout>
 
     <button @click="addGridItem()">ADD</button>
   </div>
@@ -26,9 +27,7 @@ export default {
 
     }
   },
-  components: {
-    GridLayout
-  }
+  components: {GridLayout}
 }
 </script>
 
