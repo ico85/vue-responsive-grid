@@ -120,11 +120,11 @@
       this.eventBus.$on('resizeEvent', this.resizeEventHandler);
       this.eventBus.$on('dragEvent', this.dragEventHandler);
       this.$emit('layout-created', this.layout);
-      this.$on('add-layout', () => {
+      this.$on('add-layout', (key) => {
 
         let layout = {"x": 0, "y": 9999, "w": 2, "h": 2};
 
-        layout["i"] = this.layout.length;
+        layout["i"] = key !== undefined ? key : this.layout.length;
 
         let layoutEntries = Object.entries(this.layouts);
 

@@ -5982,12 +5982,12 @@ var component = normalizeComponent(
 )
 
 /* harmony default export */ var GridItem = (component.exports);
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"53bd254a-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/GridLayout.vue?vue&type=template&id=22321a32&
-var GridLayoutvue_type_template_id_22321a32_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{ref:"item",staticClass:"vue-grid-layout",style:(_vm.mergedStyle)},[_vm._l((_vm.layout),function(item){return _c('grid-item',{key:item.i,ref:"gridItem",refInFor:true,attrs:{"x":item.x,"y":item.y,"w":item.w,"h":item.h,"i":item.i}})}),_c('grid-item',{directives:[{name:"show",rawName:"v-show",value:(_vm.isDragging),expression:"isDragging"}],staticClass:"vue-grid-placeholder",attrs:{"x":_vm.placeholder.x,"y":_vm.placeholder.y,"w":_vm.placeholder.w,"h":_vm.placeholder.h,"i":_vm.placeholder.i}})],2)}
-var GridLayoutvue_type_template_id_22321a32_staticRenderFns = []
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"53bd254a-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/GridLayout.vue?vue&type=template&id=d0ffef4a&
+var GridLayoutvue_type_template_id_d0ffef4a_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{ref:"item",staticClass:"vue-grid-layout",style:(_vm.mergedStyle)},[_vm._l((_vm.layout),function(item){return _c('grid-item',{key:item.i,ref:"gridItem",refInFor:true,attrs:{"x":item.x,"y":item.y,"w":item.w,"h":item.h,"i":item.i}})}),_c('grid-item',{directives:[{name:"show",rawName:"v-show",value:(_vm.isDragging),expression:"isDragging"}],staticClass:"vue-grid-placeholder",attrs:{"x":_vm.placeholder.x,"y":_vm.placeholder.y,"w":_vm.placeholder.w,"h":_vm.placeholder.h,"i":_vm.placeholder.i}})],2)}
+var GridLayoutvue_type_template_id_d0ffef4a_staticRenderFns = []
 
 
-// CONCATENATED MODULE: ./src/components/GridLayout.vue?vue&type=template&id=22321a32&
+// CONCATENATED MODULE: ./src/components/GridLayout.vue?vue&type=template&id=d0ffef4a&
 
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es.object.assign.js
 var es_object_assign = __webpack_require__("cca6");
@@ -6206,14 +6206,14 @@ var elementResizeDetectorMaker = __webpack_require__("eec4");
     this.eventBus.$on('resizeEvent', this.resizeEventHandler);
     this.eventBus.$on('dragEvent', this.dragEventHandler);
     this.$emit('layout-created', this.layout);
-    this.$on('add-layout', function () {
+    this.$on('add-layout', function (key) {
       var layout = {
         "x": 0,
         "y": 9999,
         "w": 2,
         "h": 2
       };
-      layout["i"] = _this.layout.length;
+      layout["i"] = key !== undefined ? key : _this.layout.length;
       var layoutEntries = Object.entries(_this.layouts);
 
       for (var i = 0; i < layoutEntries.length; i++) {
@@ -6434,8 +6434,8 @@ var GridLayoutvue_type_style_index_0_lang_css_ = __webpack_require__("e279");
 
 var GridLayout_component = normalizeComponent(
   components_GridLayoutvue_type_script_lang_js_,
-  GridLayoutvue_type_template_id_22321a32_render,
-  GridLayoutvue_type_template_id_22321a32_staticRenderFns,
+  GridLayoutvue_type_template_id_d0ffef4a_render,
+  GridLayoutvue_type_template_id_d0ffef4a_staticRenderFns,
   false,
   null,
   null,
