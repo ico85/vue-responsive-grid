@@ -130,8 +130,13 @@
 
         for (let i = 0; i < layoutEntries.length; i++) {
           let items = layoutEntries[i][1];
-          items.push(Object.assign({}, layout));
+          let layout_to_add = Object.assign({}, layout);
+          items.push(layout_to_add);
         }
+
+        this.$nextTick(() => {
+          this.$emit('layout-added');
+        });
 
       });
     },
@@ -242,7 +247,7 @@
             colWidth = (breakpointSize - (margin * (colsCount + 1))) / colsCount;
           }
 
-          if(colsCount % 2 !== 0 && colsCount > 2) {
+          if (colsCount % 2 !== 0 && colsCount > 2) {
             colsCount--;
           }
 
