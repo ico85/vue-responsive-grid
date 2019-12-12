@@ -204,6 +204,9 @@
       this.resizable = this.$parent.isResizable;
 
       this.createStyle();
+
+      this.eventBus.$emit('item-mounted', this);
+
     },
     watch: {
       isDraggable: function () {

@@ -9,11 +9,9 @@
     "build-lib": "vue-cli-service build --target lib ./src/components/index.js",
     "lint": "vue-cli-service lint"
   },
-
   "dependencies": {
     "core-js": "^3.4.3",
     "element-resize-detector": "^1.1.15",
-    "flow-to-typescript": "^1.0.0",
     "interactjs": "^1.7.2",
     "vue": "^2.6.10",
     "watch": "^1.0.2"

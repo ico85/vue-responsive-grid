@@ -206,6 +206,7 @@
       },
       layout: function () {
 
+        console.log("LYOUT CAHNG!");
         compact(correctBounds(this.layout, this.currentColCount));
         this.updateHeight();
       },
