@@ -1,6 +1,16 @@
 <template>
   <div id="app">
-    <grid-layout ref="gridLayout" :responsiveLayouts="responsiveLayouts" :breakpoints="breakpoints">
+    <grid-layout :current-layout.sync="currentLayout" ref="gridLayout" :responsiveLayouts="responsiveLayouts" :breakpoints="breakpoints">
+      <grid-item v-for="item in currentLayout" ref="gridItem"
+                 dragAllowFrom=".shart"
+                 :key="item.i"
+                 :x="item.x"
+                 :y="item.y"
+                 :w="item.w"
+                 :h="item.h"
+                 :i="item.i">
+        <div class="shart" style="padding:10px;background:lime;">SHART!</div>
+      </grid-item>
     </grid-layout>
 
     <button @click="addGridItem()">ADD</button>
@@ -10,11 +20,13 @@
 <script>
 
 import GridLayout from './components/GridLayout.vue';
+import GridItem from './components/GridItem.vue';
 
 export default {
   name: 'app',
   data() {
     return {
+      currentLayout: [],
       breakpoints: {lg: 1200, md: 996, sm: 768, xs: 480, xxs: 320},
       responsiveLayouts: {"lg":[{"x":2,"y":0,"w":2,"h":3,"i":0},{"x":1,"y":0,"w":Math.floor(Math.random() * 5),"h":2,"i":1},{"x":0,"y":0,"w":1,"h":1,"i":2}],"md":[{"x":2,"y":0,"w":1,"h":3,"i":0},{"x":1,"y":0,"w":1,"h":4,"i":1},{"x":0,"y":0,"w":1,"h":5,"i":2}],"sm":[{"x":3,"y":0,"w":1,"h":6,"i":0},{"x":1,"y":0,"w":2,"h":7,"i":1},{"x":0,"y":0,"w":1,"h":6,"i":2}],"xs":[{"x":1,"y":2,"w":1,"h":1,"i":0},{"x":2,"y":0,"w":1,"h":1,"i":1},{"x":1,"y":0,"w":1,"h":2,"i":2}],"xxs":[{"x":1,"y":3,"w":1,"h":3,"i":0},{"x":1,"y":0,"w":1,"h":3,"i":1},{"x":0,"y":0,"w":1,"h":6,"i":2}]}
     }
@@ -27,7 +39,12 @@ export default {
 
     }
   },
-  components: {GridLayout}
+  watch: {
+    currentLayout() {
+      console.log(this.currentLayout);
+    }
+  },
+  components: {GridLayout, GridItem}
 }
 </script>
 

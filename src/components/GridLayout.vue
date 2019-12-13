@@ -1,13 +1,6 @@
 <template>
   <div ref="item" class="vue-grid-layout" :style="mergedStyle">
-    <grid-item v-for="item in layout" ref="gridItem"
-               :key="item.i"
-               :x="item.x"
-               :y="item.y"
-               :w="item.w"
-               :h="item.h"
-               :i="item.i">
-    </grid-item>
+    <slot></slot>
     <grid-item class="vue-grid-placeholder"
                v-show="isDragging"
                :x="placeholder.x"
@@ -211,8 +204,8 @@
       },
       layout: function () {
 
-        console.log("LYOUT CAHNG!");
         compact(correctBounds(this.layout, this.currentColCount));
+        this.$emit("update:currentLayout", this.layout);
         this.updateHeight();
       },
       isDraggable: function () {
