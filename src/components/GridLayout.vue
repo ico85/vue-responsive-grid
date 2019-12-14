@@ -113,23 +113,42 @@
       this.eventBus.$on('resizeEvent', this.resizeEventHandler);
       this.eventBus.$on('dragEvent', this.dragEventHandler);
       this.$emit('layout-created', this.layout);
-      this.$on('add-layout', (key) => {
+      this.$on('add-item', (itemId) => {
 
-        let layout = {"x": 0, "y": 9999, "w": 2, "h": 2};
+        let item = {"x": 0, "y": 9999, "w": 2, "h": 2};
 
-        layout["i"] = key !== undefined ? key : this.layout.length;
+        item["i"] = itemId !== undefined ? itemId : this.layout.length;
 
         let layoutEntries = Object.entries(this.layouts);
 
         for (let i = 0; i < layoutEntries.length; i++) {
           let items = layoutEntries[i][1];
-          let layout_to_add = Object.assign({}, layout);
-          items.push(layout_to_add);
+          let item_to_add = Object.assign({}, item);
+          items.push(item_to_add);
         }
 
-        this.$nextTick(() => {
-          this.$emit('layout-added');
-        });
+        this.$emit('item-added', itemId);
+
+      });
+
+      this.$on('remove-item', (itemId) => {
+        let layoutsClone = Object.assign({}, this.layouts);
+
+        let layoutEntries = Object.entries(layoutsClone);
+
+        for (let i = 0; i < layoutEntries.length; i++) {
+          let items = layoutEntries[i][1];
+
+          items.some((item, i) => {
+            if (item.i == itemId) {
+              items.splice(i, 1);
+            }
+          });
+        }
+
+        this.layouts = layoutsClone;
+
+        this.$emit('item-removed', itemId);
 
       });
     },
