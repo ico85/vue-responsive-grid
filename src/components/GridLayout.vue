@@ -208,6 +208,28 @@
       responsiveLayouts(newLayouts) {
         this.layouts = newLayouts;
       },
+
+      breakpoints(newBreakpoints) {
+        this.breakpoints = newBreakpoints;
+
+        // Calculate new Column-Counts for each Breakpoint
+        this.calcColWidths();
+
+        // Delete old breakpoints from layouts-Object
+        let layouts = Object.assign({}, this.layouts);
+        let layoutEntries = Object.entries(layouts);
+
+        for (let i = 0; i < layoutEntries.length; i++) {
+
+          let breakpointKey = layoutEntries[i][0];
+
+          if(!this.breakpoints[breakpointKey]) {
+            delete layouts[breakpointKey];
+          }
+        }
+
+        this.layouts = layouts;
+      },
       width: function (newWidth, oldWidth) {
         this.rowHeight = ((this.width - (this.margin[0] * (this.currentColCount + 1))) / this.currentColCount) * this.itemRatio;
 
@@ -313,6 +335,7 @@
         if (eventName === 'dragend') this.$emit('layout-updated', this.layout);
       },
       resizeEvent: function (eventName, id, x, y, h, w) {
+
         let l = getLayoutItem(this.layout, id);
         //GetLayoutItem sometimes return null object
         if (l === undefined || l === null) {

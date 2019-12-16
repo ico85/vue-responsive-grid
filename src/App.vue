@@ -2,14 +2,12 @@
   <div id="app">
     <grid-layout :current-layout.sync="currentLayout" ref="gridLayout" :responsiveLayouts="responsiveLayouts" :breakpoints="breakpoints">
       <grid-item v-for="item in currentLayout" ref="gridItem"
-                 dragAllowFrom=".shart"
                  :key="item.i"
                  :x="item.x"
                  :y="item.y"
                  :w="item.w"
                  :h="item.h"
                  :i="item.i">
-        <div class="shart" style="padding:10px;background:lime;">SHART!</div>
       </grid-item>
     </grid-layout>
 
@@ -32,16 +30,20 @@ export default {
     }
   },
 
+  mounted() {
+    setTimeout(() => {
+      this.breakpoints = {lg: 1300, sm: 555};
+    },6000);
+  },
   methods: {
     addGridItem() {
-
       this.$refs.gridLayout.$emit("add-layout");
 
     }
   },
   watch: {
     currentLayout() {
-      console.log(this.currentLayout);
+
     }
   },
   components: {GridLayout, GridItem}
