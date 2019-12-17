@@ -117,6 +117,7 @@
 
         let item = {"x": 0, "y": 9999, "w": 2, "h": 2};
 
+        console.log(this.layout, this.layout.length);
         item["i"] = itemId !== undefined ? itemId : this.layout.length;
 
         let layoutEntries = Object.entries(this.layouts);
@@ -198,7 +199,7 @@
         let matching = sorted[0];
         for (let i = 1, len = sorted.length; i < len; i++) {
           const breakpointName = sorted[i];
-          if (this.width > this.breakpoints[breakpointName])
+          if (this.width >= this.breakpoints[breakpointName])
             matching = breakpointName;
         }
         return matching;
