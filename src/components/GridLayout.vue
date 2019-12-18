@@ -88,6 +88,8 @@
         width: null,
         mergedStyle: {},
         isDragging: false,
+        currentColCount: null,
+        lastBreakpoint: null,
         placeholder: {
           x: 0,
           y: 0,
@@ -117,7 +119,6 @@
 
         let item = {"x": 0, "y": 9999, "w": 2, "h": 2};
 
-        console.log(this.layout, this.layout.length);
         item["i"] = itemId !== undefined ? itemId : this.layout.length;
 
         let layoutEntries = Object.entries(this.layouts);
@@ -191,22 +192,10 @@
           this.layouts[this.lastBreakpoint] = newLayout;
         }
       },
-      currentColCount() {
-        return this.cols[this.lastBreakpoint];
-      },
-      lastBreakpoint() {
-        const sorted = sortBreakpoints(this.breakpoints);
-        let matching = sorted[0];
-        for (let i = 1, len = sorted.length; i < len; i++) {
-          const breakpointName = sorted[i];
-          if (this.width >= this.breakpoints[breakpointName])
-            matching = breakpointName;
-        }
-        return matching;
-      },
     },
     watch: {
       responsiveLayouts(newLayouts) {
+
         this.layouts = newLayouts;
       },
 
@@ -260,6 +249,17 @@
     methods: {
 
 
+      getLastBreakpoint() {
+
+        const sorted = sortBreakpoints(this.breakpoints);
+        let matching = sorted[0];
+        for (let i = 1, len = sorted.length; i < len; i++) {
+          const breakpointName = sorted[i];
+          if (this.width >= this.breakpoints[breakpointName])
+            matching = breakpointName;
+        }
+        return matching;
+      },
       calcColWidths() {
 
         // TODO as prop
@@ -364,6 +364,8 @@
           });
         }
 
+        this.lastBreakpoint = this.getLastBreakpoint();
+        this.currentColCount = this.cols[this.lastBreakpoint];
         compact(correctBounds(this.layout, this.currentColCount));
         this.eventBus.$emit("compact");
         this.updateHeight();

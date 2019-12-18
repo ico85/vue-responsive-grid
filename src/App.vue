@@ -1,6 +1,13 @@
 <template>
   <div id="app">
-    <grid-layout :current-layout.sync="currentLayout" ref="gridLayout" :responsiveLayouts="responsiveLayouts" :breakpoints="breakpoints">
+    <input type="number" class="cclt__custom-grid-width cclt__controls-input"
+           v-model.lazy.number="breakpoints['lg']"/>
+
+    <grid-layout :current-layout.sync="currentLayout"
+                 ref="gridLayout"
+                 :last-breakpoint.sync="lastBreakpoint"
+                 :responsiveLayouts="responsiveLayouts"
+                 :breakpoints="breakpoints">
       <grid-item v-for="item in currentLayout" ref="gridItem"
                  :key="item.i"
                  :x="item.x"
@@ -24,16 +31,18 @@ export default {
   name: 'app',
   data() {
     return {
+      lastBreakpoint: null,
       currentLayout: [],
       breakpoints: {lg: 1200, md: 996, sm: 768, xs: 480, xxs: 320},
-      responsiveLayouts: {}
+      responsiveLayouts: {"lg":[{"x":2,"y":4,"w":2,"h":2,"i":0,"moved":false},{"x":1,"y":2,"w":2,"h":2,"i":1,"moved":false},{"x":0,"y":0,"w":2,"h":2,"i":2,"moved":false}],"md":[{"x":8,"y":0,"w":4,"h":4,"i":0,"moved":false},{"x":0,"y":2,"w":8,"h":2,"i":1,"moved":false},{"x":0,"y":0,"w":8,"h":2,"i":2,"moved":false}],"sm":[{"x":2,"y":0,"w":2,"h":2,"i":0,"moved":false},{"x":0,"y":0,"w":2,"h":1,"i":1,"moved":false},{"x":4,"y":0,"w":2,"h":1,"i":2,"moved":false}],"xs":[{"x":0,"y":0,"w":4,"h":1,"i":0,"moved":false},{"x":2,"y":1,"w":2,"h":1,"i":1,"moved":false},{"x":0,"y":1,"w":2,"h":1,"i":2,"moved":false}],"xxs":[{"x":1,"y":1,"w":1,"h":1,"i":0,"moved":false},{"x":1,"y":0,"w":1,"h":1,"i":1,"moved":false},{"x":0,"y":0,"w":1,"h":2,"i":2,"moved":false}]}
     }
   },
 
   mounted() {
     setTimeout(() => {
-      this.breakpoints = {lg: 1300, sm: 555};
-    },6000);
+      this.breakpoints["sm"] = 800;
+      this.breakpoints = Object.assign({}, this.breakpoints);
+    },3000);
   },
   methods: {
     addGridItem() {
