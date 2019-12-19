@@ -1801,6 +1801,66 @@ module.exports = version && +version;
 
 /***/ }),
 
+/***/ "60da":
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+var DESCRIPTORS = __webpack_require__("83ab");
+var fails = __webpack_require__("d039");
+var objectKeys = __webpack_require__("df75");
+var getOwnPropertySymbolsModule = __webpack_require__("7418");
+var propertyIsEnumerableModule = __webpack_require__("d1e7");
+var toObject = __webpack_require__("7b0b");
+var IndexedObject = __webpack_require__("44ad");
+
+var nativeAssign = Object.assign;
+var defineProperty = Object.defineProperty;
+
+// `Object.assign` method
+// https://tc39.github.io/ecma262/#sec-object.assign
+module.exports = !nativeAssign || fails(function () {
+  // should have correct order of operations (Edge bug)
+  if (DESCRIPTORS && nativeAssign({ b: 1 }, nativeAssign(defineProperty({}, 'a', {
+    enumerable: true,
+    get: function () {
+      defineProperty(this, 'b', {
+        value: 3,
+        enumerable: false
+      });
+    }
+  }), { b: 2 })).b !== 1) return true;
+  // should work with symbols and should have deterministic property order (V8 bug)
+  var A = {};
+  var B = {};
+  // eslint-disable-next-line no-undef
+  var symbol = Symbol();
+  var alphabet = 'abcdefghijklmnopqrst';
+  A[symbol] = 7;
+  alphabet.split('').forEach(function (chr) { B[chr] = chr; });
+  return nativeAssign({}, A)[symbol] != 7 || objectKeys(nativeAssign({}, B)).join('') != alphabet;
+}) ? function assign(target, source) { // eslint-disable-line no-unused-vars
+  var T = toObject(target);
+  var argumentsLength = arguments.length;
+  var index = 1;
+  var getOwnPropertySymbols = getOwnPropertySymbolsModule.f;
+  var propertyIsEnumerable = propertyIsEnumerableModule.f;
+  while (argumentsLength > index) {
+    var S = IndexedObject(arguments[index++]);
+    var keys = getOwnPropertySymbols ? objectKeys(S).concat(getOwnPropertySymbols(S)) : objectKeys(S);
+    var length = keys.length;
+    var j = 0;
+    var key;
+    while (length > j) {
+      key = keys[j++];
+      if (!DESCRIPTORS || propertyIsEnumerable.call(S, key)) T[key] = S[key];
+    }
+  } return T;
+} : nativeAssign;
+
+
+/***/ }),
+
 /***/ "6547":
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -3882,6 +3942,21 @@ module.exports = function (it) {
 
 /***/ }),
 
+/***/ "cca6":
+/***/ (function(module, exports, __webpack_require__) {
+
+var $ = __webpack_require__("23e7");
+var assign = __webpack_require__("60da");
+
+// `Object.assign` method
+// https://tc39.github.io/ecma262/#sec-object.assign
+$({ target: 'Object', stat: true, forced: Object.assign !== assign }, {
+  assign: assign
+});
+
+
+/***/ }),
+
 /***/ "ce4e":
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -4779,6 +4854,7 @@ function compact(layout
 )
 /*: Layout*/
 {
+  console.log("at start", layout);
   var compareWith = []; // We go through the items by row and column.
 
   var sorted = sortLayoutItemsByRowCol(layout); // Holding for new items.
@@ -4796,6 +4872,7 @@ function compact(layout
 
     compareWith.push(l); // Add to output array to make sure they still come out in the right order.
 
+    console.log(layout);
     out[layout.indexOf(l)] = l; // Clear moved flag, if it exists.
 
     l.moved = false;
@@ -5936,15 +6013,18 @@ var component = normalizeComponent(
 )
 
 /* harmony default export */ var GridItem = (component.exports);
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"53bd254a-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/GridLayout.vue?vue&type=template&id=6e31536a&
-var GridLayoutvue_type_template_id_6e31536a_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{ref:"item",staticClass:"vue-grid-layout",style:(_vm.mergedStyle)},[_vm._t("default"),_c('grid-item',{directives:[{name:"show",rawName:"v-show",value:(_vm.isDragging),expression:"isDragging"}],staticClass:"vue-grid-placeholder",attrs:{"x":_vm.placeholder.x,"y":_vm.placeholder.y,"w":_vm.placeholder.w,"h":_vm.placeholder.h,"i":_vm.placeholder.i}})],2)}
-var GridLayoutvue_type_template_id_6e31536a_staticRenderFns = []
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"53bd254a-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/GridLayout.vue?vue&type=template&id=2cef5f1b&
+var GridLayoutvue_type_template_id_2cef5f1b_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{ref:"item",staticClass:"vue-grid-layout",style:(_vm.mergedStyle)},[_vm._t("default"),_c('grid-item',{directives:[{name:"show",rawName:"v-show",value:(_vm.isDragging),expression:"isDragging"}],staticClass:"vue-grid-placeholder",attrs:{"x":_vm.placeholder.x,"y":_vm.placeholder.y,"w":_vm.placeholder.w,"h":_vm.placeholder.h,"i":_vm.placeholder.i}})],2)}
+var GridLayoutvue_type_template_id_2cef5f1b_staticRenderFns = []
 
 
-// CONCATENATED MODULE: ./src/components/GridLayout.vue?vue&type=template&id=6e31536a&
+// CONCATENATED MODULE: ./src/components/GridLayout.vue?vue&type=template&id=2cef5f1b&
 
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es.array.some.js
 var es_array_some = __webpack_require__("45fc");
+
+// EXTERNAL MODULE: ./node_modules/core-js/modules/es.object.assign.js
+var es_object_assign = __webpack_require__("cca6");
 
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es.object.entries.js
 var es_object_entries = __webpack_require__("4fad");
@@ -5958,38 +6038,10 @@ var external_commonjs_vue_commonjs2_vue_root_Vue_default = /*#__PURE__*/__webpac
 
 // @flow
 
-/*:: import type {Layout} from './utils';*/
-
-/*:: export type ResponsiveLayout = {lg?: Layout, md?: Layout, sm?: Layout, xs?: Layout, xxs?: Layout};*/
-
 /*:: type Breakpoint = string;*/
 
 /*:: type Breakpoints = {lg?: number, md?: number, sm?: number, xs?: number, xxs?: number};*/
 
-/**
- * Given a width, find the highest breakpoint that matches is valid for it (width > breakpoint).
- *
- * @param  {Object} breakpoints Breakpoints object (e.g. {lg: 1200, md: 960, ...})
- * @param  {Number} width Screen width.
- * @return {String}       Highest breakpoint that is less than width.
- */
-function getBreakpointFromWidth(breakpoints
-/*: Breakpoints*/
-, width
-/*: number*/
-)
-/*: Breakpoint*/
-{
-  var sorted = sortBreakpoints(breakpoints);
-  var matching = sorted[0];
-
-  for (var i = 1, len = sorted.length; i < len; i++) {
-    var breakpointName = sorted[i];
-    if (width > breakpoints[breakpointName]) matching = breakpointName;
-  }
-
-  return matching;
-}
 /**
  * Given breakpoints, return an array of breakpoints sorted by width. This is usually
  * e.g. ['xxs', 'xs', 'sm', ...]
@@ -5997,7 +6049,6 @@ function getBreakpointFromWidth(breakpoints
  * @param  {Object} breakpoints Key/value pair of breakpoint names to widths.
  * @return {Array}              Sorted breakpoints.
  */
-
 function sortBreakpoints(breakpoints
 /*: Breakpoints*/
 )
@@ -6039,6 +6090,8 @@ function removeWindowEventListener(event
   window.removeEventListener(event, callback);
 }
 // CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js??ref--12-0!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/GridLayout.vue?vue&type=script&lang=js&
+
+
 
 
 
@@ -6130,6 +6183,7 @@ var elementResizeDetectorMaker = __webpack_require__("eec4");
       isDragging: false,
       currentColCount: null,
       lastBreakpoint: null,
+      layout: [],
       placeholder: {
         x: 0,
         y: 0,
@@ -6207,7 +6261,6 @@ var elementResizeDetectorMaker = __webpack_require__("eec4");
   mounted: function mounted() {
     var _this2 = this;
 
-    this.calcColWidths();
     this.layouts = this.responsiveLayouts;
     this.$nextTick(function () {
       _this2.onWindowResize();
@@ -6224,27 +6277,21 @@ var elementResizeDetectorMaker = __webpack_require__("eec4");
       });
     });
   },
-  computed: {
-    layout: {
-      get: function get() {
-        return this.layouts[this.lastBreakpoint] || [];
-      },
-      set: function set(newLayout) {
-        this.layouts[this.lastBreakpoint] = newLayout;
-      }
-    }
-  },
   watch: {
     responsiveLayouts: function responsiveLayouts(newLayouts) {
       this.layouts = newLayouts;
     },
     breakpoints: function breakpoints(newBreakpoints) {
-      this.breakpoints = newBreakpoints; // Calculate new Column-Counts for each Breakpoint
+      this.breakpoints = newBreakpoints; // TODO detect new Breakpoint and copy layout from breakpoint below!
+      // Calculate new Column-Counts for each Breakpoint
 
       this.calcColWidths(); // Delete old breakpoints from layouts-Object
 
       var layouts = Object.assign({}, this.layouts);
       var layoutEntries = Object.entries(layouts);
+      var breakpointEntries = Object.entries(this.breakpoints).sort(function (a, b) {
+        return a[1] - b[1];
+      });
 
       for (var i = 0; i < layoutEntries.length; i++) {
         var breakpointKey = layoutEntries[i][0];
@@ -6254,7 +6301,18 @@ var elementResizeDetectorMaker = __webpack_require__("eec4");
         }
       }
 
+      for (var _i = 0; _i < breakpointEntries.length; _i++) {
+        var _breakpointKey = breakpointEntries[_i][0];
+
+        if (!layouts[_breakpointKey] && _i - 1 >= 0) {
+          var previousBreakpointKey = breakpointEntries[_i - 1][0];
+          var layout = Object.assign([], layouts[previousBreakpointKey]);
+          layouts[_breakpointKey] = layout;
+        }
+      }
+
       this.layouts = layouts;
+      this.resizeEvent();
     },
     width: function width(newWidth, oldWidth) {
       var _this3 = this;
@@ -6295,7 +6353,6 @@ var elementResizeDetectorMaker = __webpack_require__("eec4");
       return matching;
     },
     calcColWidths: function calcColWidths() {
-      // TODO as prop
       var minColWidth = 60;
       var breakpointEntries = Object.entries(this.breakpoints);
       var margin = this.margin[0];
@@ -6395,7 +6452,9 @@ var elementResizeDetectorMaker = __webpack_require__("eec4");
         });
       }
 
+      this.calcColWidths();
       this.lastBreakpoint = this.getLastBreakpoint();
+      this.layout = this.layouts[this.lastBreakpoint];
       this.currentColCount = this.cols[this.lastBreakpoint];
       compact(correctBounds(this.layout, this.currentColCount));
       this.eventBus.$emit("compact");
@@ -6420,8 +6479,8 @@ var GridLayoutvue_type_style_index_0_lang_css_ = __webpack_require__("e279");
 
 var GridLayout_component = normalizeComponent(
   components_GridLayoutvue_type_script_lang_js_,
-  GridLayoutvue_type_template_id_6e31536a_render,
-  GridLayoutvue_type_template_id_6e31536a_staticRenderFns,
+  GridLayoutvue_type_template_id_2cef5f1b_render,
+  GridLayoutvue_type_template_id_2cef5f1b_staticRenderFns,
   false,
   null,
   null,

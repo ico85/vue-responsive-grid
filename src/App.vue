@@ -40,7 +40,7 @@ export default {
 
   mounted() {
     setTimeout(() => {
-      this.breakpoints["sm"] = 800;
+      this.breakpoints["sexytime"] = 1250;
       this.breakpoints = Object.assign({}, this.breakpoints);
     },3000);
   },

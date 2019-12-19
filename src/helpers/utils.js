@@ -50,6 +50,8 @@ export function collides(l1: LayoutItem, l2: LayoutItem): boolean {
  */
 export function compact(layout: Layout): Layout {
 
+  console.log("at start", layout);
+
   const compareWith = [];
   // We go through the items by row and column.
   const sorted = sortLayoutItemsByRowCol(layout);
@@ -67,6 +69,7 @@ export function compact(layout: Layout): Layout {
     compareWith.push(l);
 
     // Add to output array to make sure they still come out in the right order.
+    console.log(layout);
     out[layout.indexOf(l)] = l;
 
     // Clear moved flag, if it exists.

@@ -90,6 +90,7 @@
         isDragging: false,
         currentColCount: null,
         lastBreakpoint: null,
+        layout: [],
         placeholder: {
           x: 0,
           y: 0,
@@ -164,8 +165,6 @@
     },
     mounted: function () {
 
-      this.calcColWidths();
-
       this.layouts = this.responsiveLayouts;
 
       this.$nextTick(() => {
@@ -183,16 +182,6 @@
       });
 
     },
-    computed: {
-      layout: {
-        get() {
-          return this.layouts[this.lastBreakpoint] || [];
-        },
-        set(newLayout) {
-          this.layouts[this.lastBreakpoint] = newLayout;
-        }
-      },
-    },
     watch: {
       responsiveLayouts(newLayouts) {
 
@@ -202,12 +191,15 @@
       breakpoints(newBreakpoints) {
         this.breakpoints = newBreakpoints;
 
+        // TODO detect new Breakpoint and copy layout from breakpoint below!
+
         // Calculate new Column-Counts for each Breakpoint
         this.calcColWidths();
 
         // Delete old breakpoints from layouts-Object
         let layouts = Object.assign({}, this.layouts);
         let layoutEntries = Object.entries(layouts);
+        let breakpointEntries = Object.entries(this.breakpoints).sort((a,b) => a[1] - b[1]);
 
         for (let i = 0; i < layoutEntries.length; i++) {
 
@@ -218,7 +210,20 @@
           }
         }
 
+        for (let i = 0; i < breakpointEntries.length; i++) {
+
+          let breakpointKey = breakpointEntries[i][0];
+
+          if(!layouts[breakpointKey] && i-1 >= 0) {
+            let previousBreakpointKey = breakpointEntries[i-1][0];
+            let layout = Object.assign([], layouts[previousBreakpointKey]);
+            layouts[breakpointKey] = layout;
+          }
+        }
+
         this.layouts = layouts;
+
+        this.resizeEvent();
       },
       width: function (newWidth, oldWidth) {
         this.rowHeight = ((this.width - (this.margin[0] * (this.currentColCount + 1))) / this.currentColCount) * this.itemRatio;
@@ -262,7 +267,6 @@
       },
       calcColWidths() {
 
-        // TODO as prop
         const minColWidth = 60;
 
         let breakpointEntries = Object.entries(this.breakpoints);
@@ -337,6 +341,7 @@
       },
       resizeEvent: function (eventName, id, x, y, h, w) {
 
+
         let l = getLayoutItem(this.layout, id);
         //GetLayoutItem sometimes return null object
         if (l === undefined || l === null) {
@@ -364,8 +369,12 @@
           });
         }
 
+        this.calcColWidths();
+
         this.lastBreakpoint = this.getLastBreakpoint();
+        this.layout = this.layouts[this.lastBreakpoint];
         this.currentColCount = this.cols[this.lastBreakpoint];
+
         compact(correctBounds(this.layout, this.currentColCount));
         this.eventBus.$emit("compact");
         this.updateHeight();
