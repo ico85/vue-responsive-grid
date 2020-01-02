@@ -1,13 +1,12 @@
 <template>
   <div id="app">
-    <input type="number" class="cclt__custom-grid-width cclt__controls-input"
-           v-model.lazy.number="breakpoints['lg']"/>
 
     <grid-layout :current-layout.sync="currentLayout"
                  ref="gridLayout"
                  :last-breakpoint.sync="lastBreakpoint"
                  :responsiveLayouts="responsiveLayouts"
-                 :breakpoints="breakpoints">
+                 :breakpoints.sync="breakpoints">
+
       <grid-item v-for="item in currentLayout" ref="gridItem"
                  :key="item.i"
                  :x="item.x"
@@ -16,6 +15,7 @@
                  :h="item.h"
                  :i="item.i">
       </grid-item>
+
     </grid-layout>
 
     <button @click="addGridItem()">ADD</button>
@@ -39,16 +39,10 @@ export default {
   },
 
   mounted() {
-    setTimeout(() => {
-      this.breakpoints["sexytime"] = 1250;
-      this.breakpoints = Object.assign({}, this.breakpoints);
-    },3000);
   },
   methods: {
     addGridItem() {
-      console.log("about do sed");
       this.$refs.gridLayout.$emit("add-item");
-
     }
   },
   watch: {
