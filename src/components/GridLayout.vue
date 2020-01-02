@@ -188,7 +188,9 @@
         this.layouts = newLayouts;
       },
 
-      breakpoints() {
+      breakpoints(newBreakpoints) {
+
+        this.breakpoints = newBreakpoints;
 
         // Calculate new Column-Counts for each Breakpoint
         this.calcColWidths();
