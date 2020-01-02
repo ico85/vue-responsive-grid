@@ -188,10 +188,7 @@
         this.layouts = newLayouts;
       },
 
-      breakpoints(newBreakpoints) {
-        this.breakpoints = newBreakpoints;
-
-        // TODO detect new Breakpoint and copy layout from breakpoint below!
+      breakpoints() {
 
         // Calculate new Column-Counts for each Breakpoint
         this.calcColWidths();
@@ -216,7 +213,7 @@
 
           if(!layouts[breakpointKey] && i-1 >= 0) {
             let previousBreakpointKey = breakpointEntries[i-1][0];
-            let layout = Object.assign([], layouts[previousBreakpointKey]);
+            let layout = JSON.parse(JSON.stringify(layouts[previousBreakpointKey]));
             layouts[breakpointKey] = layout;
           }
         }
