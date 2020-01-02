@@ -53,13 +53,6 @@
         type: Number,
         default: 1,
       },
-      // TODO make responsive
-      margin: {
-        type: Array,
-        default: function () {
-          return [10, 10];
-        }
-      },
       isDraggable: {
         type: Boolean,
         default: true
@@ -80,6 +73,12 @@
           return {lg: 1200, md: 996, sm: 768, xs: 480, xxs: 0}
         }
       },
+      margin: {
+        type: Object,
+        default: function () {
+          return {lg: 10, md: 10, sm: 10, xs: 10, xxs: 10}
+        }
+      }
     },
     data() {
       return {
@@ -89,6 +88,7 @@
         mergedStyle: {},
         isDragging: false,
         currentColCount: null,
+        currentMargin: null,
         lastBreakpoint: null,
         layout: [],
         placeholder: {
@@ -184,13 +184,13 @@
     },
     watch: {
       responsiveLayouts(newLayouts) {
-
         this.layouts = newLayouts;
       },
 
-      breakpoints(newBreakpoints) {
-
-        this.breakpoints = newBreakpoints;
+      margin() {
+        this.resizeEvent();
+      },
+      breakpoints() {
 
         // Calculate new Column-Counts for each Breakpoint
         this.calcColWidths();
@@ -225,7 +225,7 @@
         this.resizeEvent();
       },
       width: function (newWidth, oldWidth) {
-        this.rowHeight = ((this.width - (this.margin[0] * (this.currentColCount + 1))) / this.currentColCount) * this.itemRatio;
+        this.rowHeight = ((this.width - (this.currentMargin * (this.currentColCount + 1))) / this.currentColCount) * this.itemRatio;
 
         this.$nextTick(() => {
           if (oldWidth === null) {
@@ -252,7 +252,6 @@
     },
     methods: {
 
-
       getLastBreakpoint() {
 
         const sorted = sortBreakpoints(this.breakpoints);
@@ -269,7 +268,7 @@
         const minColWidth = 60;
 
         let breakpointEntries = Object.entries(this.breakpoints);
-        let margin = this.margin[0];
+        let margin = this.currentMargin;
         let cols = {};
 
         for (let i = 0; i < breakpointEntries.length; i++) {
@@ -306,7 +305,7 @@
         this.eventBus.$emit("resizeEvent");
       },
       containerHeight: function () {
-        return bottom(this.layout) * (this.rowHeight + this.margin[1]) + this.margin[1] + 'px';
+        return bottom(this.layout) * (this.rowHeight + this.currentMargin) + this.currentMargin + 'px';
       },
       dragEvent: function (eventName, id, x, y, h, w) {
         let l = getLayoutItem(this.layout, id);
@@ -340,7 +339,6 @@
       },
       resizeEvent: function (eventName, id, x, y, h, w) {
 
-
         let l = getLayoutItem(this.layout, id);
         //GetLayoutItem sometimes return null object
         if (l === undefined || l === null) {
@@ -373,6 +371,7 @@
         this.lastBreakpoint = this.getLastBreakpoint();
         this.layout = this.layouts[this.lastBreakpoint];
         this.currentColCount = this.cols[this.lastBreakpoint];
+        this.currentMargin = this.margin[this.lastBreakpoint];
 
         compact(correctBounds(this.layout, this.currentColCount));
         this.eventBus.$emit("compact");

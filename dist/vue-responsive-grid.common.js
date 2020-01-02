@@ -4718,12 +4718,12 @@ if (typeof window !== 'undefined') {
 // Indicate to webpack that this file can be concatenated
 /* harmony default export */ var setPublicPath = (null);
 
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"53bd254a-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/GridItem.vue?vue&type=template&id=74c0bb8a&
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"53bd254a-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/GridItem.vue?vue&type=template&id=0c1c0bff&
 var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{ref:"item",staticClass:"vue-grid-item",class:_vm.classObj,style:(_vm.style)},[_vm._t("default"),(_vm.resizable)?_c('span',{ref:"handle",class:_vm.resizableHandleClass}):_vm._e()],2)}
 var staticRenderFns = []
 
 
-// CONCATENATED MODULE: ./src/components/GridItem.vue?vue&type=template&id=74c0bb8a&
+// CONCATENATED MODULE: ./src/components/GridItem.vue?vue&type=template&id=0c1c0bff&
 
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es.array.index-of.js
 var es_array_index_of = __webpack_require__("c975");
@@ -5427,7 +5427,6 @@ var interact = __webpack_require__("fb3a");
   inject: ["eventBus"],
   data: function data() {
     return {
-      margin: [10, 10],
       draggable: null,
       resizable: null,
       isDragging: false,
@@ -5482,7 +5481,6 @@ var interact = __webpack_require__("fb3a");
     this.interactObj.unset(); // destroy interact intance
   },
   mounted: function mounted() {
-    this.margin = this.$parent.margin !== undefined ? this.$parent.margin : [10, 10];
     this.draggable = this.$parent.isDraggable;
     this.resizable = this.$parent.isResizable;
     this.createStyle();
@@ -5753,13 +5751,13 @@ var interact = __webpack_require__("fb3a");
     calcPosition: function calcPosition(x, y, w, h) {
       var colWidth = this.calcColWidth();
       return {
-        left: Math.round(colWidth * x + (x + 1) * this.margin[0]),
-        top: Math.round(this.$parent.rowHeight * y + (y + 1) * this.margin[1]),
+        left: Math.round(colWidth * x + (x + 1) * this.$parent.currentMargin),
+        top: Math.round(this.$parent.rowHeight * y + (y + 1) * this.$parent.currentMargin),
         // 0 * Infinity === NaN, which causes problems with resize constriants;
         // Fix this if it occurs.
         // Note we do it here rather than later because Math.round(Infinity) causes deopt
-        width: w === Infinity ? w : Math.round(colWidth * w + Math.max(0, w - 1) * this.margin[0]),
-        height: h === Infinity ? h : Math.round(this.$parent.rowHeight * h + Math.max(0, h - 1) * this.margin[1])
+        width: w === Infinity ? w : Math.round(colWidth * w + Math.max(0, w - 1) * this.$parent.currentMargin),
+        height: h === Infinity ? h : Math.round(this.$parent.rowHeight * h + Math.max(0, h - 1) * this.$parent.currentMargin)
       };
     },
 
@@ -5771,8 +5769,8 @@ var interact = __webpack_require__("fb3a");
      */
     calcXY: function calcXY(top, left) {
       var colWidth = this.calcColWidth();
-      var x = Math.round((left - this.margin[0]) / (colWidth + this.margin[0]));
-      var y = Math.round((top - this.margin[1]) / (this.$parent.rowHeight + this.margin[1]));
+      var x = Math.round((left - this.$parent.currentMargin) / (colWidth + this.$parent.currentMargin));
+      var y = Math.round((top - this.$parent.currentMargin) / (this.$parent.rowHeight + this.$parent.currentMargin));
       x = Math.max(Math.min(x, this.$parent.currentColCount - this.innerW), 0);
       return {
         x: x,
@@ -5780,7 +5778,7 @@ var interact = __webpack_require__("fb3a");
       };
     },
     calcColWidth: function calcColWidth() {
-      var colWidth = (this.$parent.width - this.margin[0] * (this.$parent.currentColCount + 1)) / this.$parent.currentColCount; // console.log("### COLS=" + this.$parent.currentColCount + " COL WIDTH=" + colWidth + " MARGIN " + this.margin[0]);
+      var colWidth = (this.$parent.width - this.$parent.currentMargin * (this.$parent.currentColCount + 1)) / this.$parent.currentColCount; // console.log("### COLS=" + this.$parent.currentColCount + " COL WIDTH=" + colWidth + " MARGIN " + this.$parent.currentMargin);
 
       return colWidth;
     },
@@ -5796,8 +5794,8 @@ var interact = __webpack_require__("fb3a");
       // ...
       // w = (width + margin) / (colWidth + margin)
 
-      var w = Math.round((width + this.margin[0]) / (colWidth + this.margin[0]));
-      var h = Math.round((height + this.margin[1]) / (this.$parent.rowHeight + this.margin[1])); // Capping
+      var w = Math.round((width + this.$parent.currentMargin) / (colWidth + this.$parent.currentMargin));
+      var h = Math.round((height + this.$parent.currentMargin) / (this.$parent.rowHeight + this.$parent.currentMargin)); // Capping
 
       w = Math.max(Math.min(w, this.$parent.currentColCount - this.innerX), 0);
       return {
@@ -6002,12 +6000,12 @@ var component = normalizeComponent(
 )
 
 /* harmony default export */ var GridItem = (component.exports);
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"53bd254a-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/GridLayout.vue?vue&type=template&id=199b41d6&
-var GridLayoutvue_type_template_id_199b41d6_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{ref:"item",staticClass:"vue-grid-layout",style:(_vm.mergedStyle)},[_vm._t("default"),_c('grid-item',{directives:[{name:"show",rawName:"v-show",value:(_vm.isDragging),expression:"isDragging"}],staticClass:"vue-grid-placeholder",attrs:{"x":_vm.placeholder.x,"y":_vm.placeholder.y,"w":_vm.placeholder.w,"h":_vm.placeholder.h,"i":_vm.placeholder.i}})],2)}
-var GridLayoutvue_type_template_id_199b41d6_staticRenderFns = []
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"53bd254a-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/GridLayout.vue?vue&type=template&id=007f015e&
+var GridLayoutvue_type_template_id_007f015e_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{ref:"item",staticClass:"vue-grid-layout",style:(_vm.mergedStyle)},[_vm._t("default"),_c('grid-item',{directives:[{name:"show",rawName:"v-show",value:(_vm.isDragging),expression:"isDragging"}],staticClass:"vue-grid-placeholder",attrs:{"x":_vm.placeholder.x,"y":_vm.placeholder.y,"w":_vm.placeholder.w,"h":_vm.placeholder.h,"i":_vm.placeholder.i}})],2)}
+var GridLayoutvue_type_template_id_007f015e_staticRenderFns = []
 
 
-// CONCATENATED MODULE: ./src/components/GridLayout.vue?vue&type=template&id=199b41d6&
+// CONCATENATED MODULE: ./src/components/GridLayout.vue?vue&type=template&id=007f015e&
 
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es.array.some.js
 var es_array_some = __webpack_require__("45fc");
@@ -6129,13 +6127,6 @@ var elementResizeDetectorMaker = __webpack_require__("eec4");
       type: Number,
       default: 1
     },
-    // TODO make responsive
-    margin: {
-      type: Array,
-      default: function _default() {
-        return [10, 10];
-      }
-    },
     isDraggable: {
       type: Boolean,
       default: true
@@ -6161,6 +6152,18 @@ var elementResizeDetectorMaker = __webpack_require__("eec4");
           xxs: 0
         };
       }
+    },
+    margin: {
+      type: Object,
+      default: function _default() {
+        return {
+          lg: 10,
+          md: 10,
+          sm: 10,
+          xs: 10,
+          xxs: 10
+        };
+      }
     }
   },
   data: function data() {
@@ -6171,6 +6174,7 @@ var elementResizeDetectorMaker = __webpack_require__("eec4");
       mergedStyle: {},
       isDragging: false,
       currentColCount: null,
+      currentMargin: null,
       lastBreakpoint: null,
       layout: [],
       placeholder: {
@@ -6270,9 +6274,11 @@ var elementResizeDetectorMaker = __webpack_require__("eec4");
     responsiveLayouts: function responsiveLayouts(newLayouts) {
       this.layouts = newLayouts;
     },
-    breakpoints: function breakpoints(newBreakpoints) {
-      this.breakpoints = newBreakpoints; // Calculate new Column-Counts for each Breakpoint
-
+    margin: function margin() {
+      this.resizeEvent();
+    },
+    breakpoints: function breakpoints() {
+      // Calculate new Column-Counts for each Breakpoint
       this.calcColWidths(); // Delete old breakpoints from layouts-Object
 
       var layouts = Object.assign({}, this.layouts);
@@ -6305,7 +6311,7 @@ var elementResizeDetectorMaker = __webpack_require__("eec4");
     width: function width(newWidth, oldWidth) {
       var _this3 = this;
 
-      this.rowHeight = (this.width - this.margin[0] * (this.currentColCount + 1)) / this.currentColCount * this.itemRatio;
+      this.rowHeight = (this.width - this.currentMargin * (this.currentColCount + 1)) / this.currentColCount * this.itemRatio;
       this.$nextTick(function () {
         if (oldWidth === null) {
           _this3.$nextTick(function () {
@@ -6343,7 +6349,7 @@ var elementResizeDetectorMaker = __webpack_require__("eec4");
     calcColWidths: function calcColWidths() {
       var minColWidth = 60;
       var breakpointEntries = Object.entries(this.breakpoints);
-      var margin = this.margin[0];
+      var margin = this.currentMargin;
       var cols = {};
 
       for (var i = 0; i < breakpointEntries.length; i++) {
@@ -6376,7 +6382,7 @@ var elementResizeDetectorMaker = __webpack_require__("eec4");
       this.eventBus.$emit("resizeEvent");
     },
     containerHeight: function containerHeight() {
-      return bottom(this.layout) * (this.rowHeight + this.margin[1]) + this.margin[1] + 'px';
+      return bottom(this.layout) * (this.rowHeight + this.currentMargin) + this.currentMargin + 'px';
     },
     dragEvent: function dragEvent(eventName, id, x, y, h, w) {
       var l = getLayoutItem(this.layout, id);
@@ -6444,6 +6450,7 @@ var elementResizeDetectorMaker = __webpack_require__("eec4");
       this.lastBreakpoint = this.getLastBreakpoint();
       this.layout = this.layouts[this.lastBreakpoint];
       this.currentColCount = this.cols[this.lastBreakpoint];
+      this.currentMargin = this.margin[this.lastBreakpoint];
       compact(correctBounds(this.layout, this.currentColCount));
       this.eventBus.$emit("compact");
       this.updateHeight();
@@ -6467,8 +6474,8 @@ var GridLayoutvue_type_style_index_0_lang_css_ = __webpack_require__("e279");
 
 var GridLayout_component = normalizeComponent(
   components_GridLayoutvue_type_script_lang_js_,
-  GridLayoutvue_type_template_id_199b41d6_render,
-  GridLayoutvue_type_template_id_199b41d6_staticRenderFns,
+  GridLayoutvue_type_template_id_007f015e_render,
+  GridLayoutvue_type_template_id_007f015e_staticRenderFns,
   false,
   null,
   null,

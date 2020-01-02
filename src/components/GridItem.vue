@@ -141,7 +141,6 @@
     inject: ["eventBus"],
     data: function () {
       return {
-        margin: [10, 10],
         draggable: null,
         resizable: null,
 
@@ -199,7 +198,6 @@
     },
     mounted: function () {
 
-      this.margin = this.$parent.margin !== undefined ? this.$parent.margin : [10, 10];
       this.draggable = this.$parent.isDraggable;
       this.resizable = this.$parent.isResizable;
 
@@ -448,13 +446,13 @@
       calcPosition: function (x, y, w, h) {
         const colWidth = this.calcColWidth();
         return {
-          left: Math.round(colWidth * x + (x + 1) * this.margin[0]),
-          top: Math.round(this.$parent.rowHeight * y + (y + 1) * this.margin[1]),
+          left: Math.round(colWidth * x + (x + 1) * this.$parent.currentMargin),
+          top: Math.round(this.$parent.rowHeight * y + (y + 1) * this.$parent.currentMargin),
           // 0 * Infinity === NaN, which causes problems with resize constriants;
           // Fix this if it occurs.
           // Note we do it here rather than later because Math.round(Infinity) causes deopt
-          width: w === Infinity ? w : Math.round(colWidth * w + Math.max(0, w - 1) * this.margin[0]),
-          height: h === Infinity ? h : Math.round(this.$parent.rowHeight * h + Math.max(0, h - 1) * this.margin[1])
+          width: w === Infinity ? w : Math.round(colWidth * w + Math.max(0, w - 1) * this.$parent.currentMargin),
+          height: h === Infinity ? h : Math.round(this.$parent.rowHeight * h + Math.max(0, h - 1) * this.$parent.currentMargin)
         };
 
       },
@@ -467,8 +465,8 @@
       calcXY(top, left) {
         const colWidth = this.calcColWidth();
 
-        let x = Math.round((left - this.margin[0]) / (colWidth + this.margin[0]));
-        let y = Math.round((top - this.margin[1]) / (this.$parent.rowHeight + this.margin[1]));
+        let x = Math.round((left - this.$parent.currentMargin) / (colWidth + this.$parent.currentMargin));
+        let y = Math.round((top - this.$parent.currentMargin) / (this.$parent.rowHeight + this.$parent.currentMargin));
 
         x = Math.max(Math.min(x, this.$parent.currentColCount - this.innerW), 0);
 
@@ -476,8 +474,8 @@
       },
 
       calcColWidth() {
-        const colWidth = (this.$parent.width - (this.margin[0] * (this.$parent.currentColCount + 1))) / this.$parent.currentColCount;
-        // console.log("### COLS=" + this.$parent.currentColCount + " COL WIDTH=" + colWidth + " MARGIN " + this.margin[0]);
+        const colWidth = (this.$parent.width - (this.$parent.currentMargin * (this.$parent.currentColCount + 1))) / this.$parent.currentColCount;
+        // console.log("### COLS=" + this.$parent.currentColCount + " COL WIDTH=" + colWidth + " MARGIN " + this.$parent.currentMargin);
         return colWidth;
       },
 
@@ -494,8 +492,8 @@
         // width = colWidth * w - (margin * (w - 1))
         // ...
         // w = (width + margin) / (colWidth + margin)
-        let w = Math.round((width + this.margin[0]) / (colWidth + this.margin[0]));
-        let h = Math.round((height + this.margin[1]) / (this.$parent.rowHeight + this.margin[1]));
+        let w = Math.round((width + this.$parent.currentMargin) / (colWidth + this.$parent.currentMargin));
+        let h = Math.round((height + this.$parent.currentMargin) / (this.$parent.rowHeight + this.$parent.currentMargin));
 
         // Capping
         w = Math.max(Math.min(w, this.$parent.currentColCount - this.innerX), 0);
