@@ -192,9 +192,6 @@
       },
       breakpoints() {
 
-        // Calculate new Column-Counts for each Breakpoint
-        this.calcColWidths();
-
         // Delete old breakpoints from layouts-Object
         let layouts = Object.assign({}, this.layouts);
         let layoutEntries = Object.entries(layouts);
@@ -365,12 +362,14 @@
           });
         }
 
+        this.lastBreakpoint = this.getLastBreakpoint();
+        this.currentMargin = this.margin[this.lastBreakpoint];
+        this.layout = this.layouts[this.lastBreakpoint];
+
         this.calcColWidths();
 
-        this.lastBreakpoint = this.getLastBreakpoint();
-        this.layout = this.layouts[this.lastBreakpoint];
         this.currentColCount = this.cols[this.lastBreakpoint];
-        this.currentMargin = this.margin[this.lastBreakpoint];
+        console.log(this.currentColCount);
         this.rowHeight = ((this.width - (this.currentMargin * (this.currentColCount + 1))) / this.currentColCount) * this.itemRatio;
         compact(correctBounds(this.layout, this.currentColCount));
         this.eventBus.$emit("compact");

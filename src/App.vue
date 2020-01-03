@@ -1,9 +1,13 @@
 <template>
   <div id="app">
 
+    <input type="number" class="cclt__grid-margin cclt__controls-input"
+           v-model.lazy.number="currentMargin"/>
+
     <grid-layout :current-layout.sync="currentLayout"
                  ref="gridLayout"
                  :last-breakpoint.sync="lastBreakpoint"
+                 :margin="margin"
                  :responsiveLayouts="responsiveLayouts"
                  :breakpoints.sync="breakpoints">
 
@@ -31,7 +35,9 @@ export default {
   name: 'app',
   data() {
     return {
+      currentMargin: 0,
       lastBreakpoint: null,
+      margin: {lg: 10, md: 10, sm: 10, xs: 10, xxs: 10},
       currentLayout: [],
       breakpoints: {lg: 1200, md: 996, sm: 768, xs: 480, xxs: 320},
       responsiveLayouts: {"lg":[{"x":2,"y":4,"w":2,"h":2,"i":0,"moved":false},{"x":1,"y":2,"w":2,"h":2,"i":1,"moved":false},{"x":0,"y":0,"w":2,"h":2,"i":2,"moved":false}],"md":[{"x":8,"y":0,"w":4,"h":4,"i":0,"moved":false},{"x":0,"y":2,"w":8,"h":2,"i":1,"moved":false},{"x":0,"y":0,"w":8,"h":2,"i":2,"moved":false}],"sm":[{"x":2,"y":0,"w":2,"h":2,"i":0,"moved":false},{"x":0,"y":0,"w":2,"h":1,"i":1,"moved":false},{"x":4,"y":0,"w":2,"h":1,"i":2,"moved":false}],"xs":[{"x":0,"y":0,"w":4,"h":1,"i":0,"moved":false},{"x":2,"y":1,"w":2,"h":1,"i":1,"moved":false},{"x":0,"y":1,"w":2,"h":1,"i":2,"moved":false}],"xxs":[{"x":1,"y":1,"w":1,"h":1,"i":0,"moved":false},{"x":1,"y":0,"w":1,"h":1,"i":1,"moved":false},{"x":0,"y":0,"w":1,"h":2,"i":2,"moved":false}]}
@@ -39,6 +45,7 @@ export default {
   },
 
   mounted() {
+
   },
   methods: {
     addGridItem() {
@@ -48,7 +55,15 @@ export default {
   watch: {
     currentLayout() {
 
-    }
+    },
+    currentMargin() {
+
+      let margin = Object.assign({}, this.margin);
+      margin["lg"] = this.currentMargin;
+
+      this.margin = margin;
+
+    },
   },
   components: {GridLayout, GridItem}
 }
