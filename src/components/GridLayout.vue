@@ -280,7 +280,7 @@
             colWidth = (breakpointSize - (margin * (colsCount + 1))) / colsCount;
           }
 
-          if (colsCount % 2 !== 0 && colsCount > 2) {
+          if (colsCount % 2 !== 0 && colsCount % 3 !== 0 && colsCount > 2) {
             colsCount--;
           }
 
