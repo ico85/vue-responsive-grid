@@ -5,10 +5,10 @@
            v-model.lazy.number="currentMargin"/>
 
     <grid-layout :current-layout.sync="currentLayout"
+                 :layouts.sync="layouts"
                  ref="gridLayout"
                  :last-breakpoint.sync="lastBreakpoint"
-                 :margin="margin"
-                 :responsiveLayouts="responsiveLayouts"
+                 :margin.sync="margin"
                  :breakpoints.sync="breakpoints">
 
       <grid-item v-for="item in currentLayout" ref="gridItem"
@@ -40,7 +40,7 @@ export default {
       margin: {lg: 10, md: 10, sm: 10, xs: 10, xxs: 10},
       currentLayout: [],
       breakpoints: {lg: 1200, md: 996, sm: 768, xs: 480, xxs: 320},
-      responsiveLayouts: {"lg":[{"x":2,"y":4,"w":2,"h":2,"i":0,"moved":false},{"x":1,"y":2,"w":2,"h":2,"i":1,"moved":false},{"x":0,"y":0,"w":2,"h":2,"i":2,"moved":false}],"md":[{"x":8,"y":0,"w":4,"h":4,"i":0,"moved":false},{"x":0,"y":2,"w":8,"h":2,"i":1,"moved":false},{"x":0,"y":0,"w":8,"h":2,"i":2,"moved":false}],"sm":[{"x":2,"y":0,"w":2,"h":2,"i":0,"moved":false},{"x":0,"y":0,"w":2,"h":1,"i":1,"moved":false},{"x":4,"y":0,"w":2,"h":1,"i":2,"moved":false}],"xs":[{"x":0,"y":0,"w":4,"h":1,"i":0,"moved":false},{"x":2,"y":1,"w":2,"h":1,"i":1,"moved":false},{"x":0,"y":1,"w":2,"h":1,"i":2,"moved":false}],"xxs":[{"x":1,"y":1,"w":1,"h":1,"i":0,"moved":false},{"x":1,"y":0,"w":1,"h":1,"i":1,"moved":false},{"x":0,"y":0,"w":1,"h":2,"i":2,"moved":false}]}
+      layouts: null
     }
   },
 

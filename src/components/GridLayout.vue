@@ -49,6 +49,7 @@
       GridItem
     },
     props: {
+      layouts: null,
       itemRatio: {
         type: Number,
         default: 1,
@@ -60,12 +61,6 @@
       isResizable: {
         type: Boolean,
         default: true
-      },
-      responsiveLayouts: {
-        type: Object,
-        default: function () {
-          return {};
-        }
       },
       breakpoints: {
         type: Object,
@@ -98,7 +93,6 @@
           h: 0,
           i: -1
         },
-        layouts: {},
       };
     },
     created() {
@@ -149,7 +143,7 @@
           });
         }
 
-        this.layouts = layoutsClone;
+        this.$emit("update:layouts", layoutsClone);
 
         this.$emit('item-removed', itemId);
 
@@ -165,7 +159,17 @@
     },
     mounted: function () {
 
-      this.layouts = this.responsiveLayouts;
+      if(!this.layouts) {
+        let breakpointEntries = Object.entries(this.breakpoints);
+        let layouts = {};
+
+        for (let i = 0; i < breakpointEntries.length; i++) {
+          let breakpointKey = breakpointEntries[i][0];
+          layouts[breakpointKey] = [];
+        }
+
+        this.$emit("update:layouts", layouts);
+      }
 
       this.$nextTick(() => {
 
@@ -183,9 +187,6 @@
 
     },
     watch: {
-      responsiveLayouts(newLayouts) {
-        this.layouts = newLayouts;
-      },
 
       margin() {
         this.resizeEvent();
@@ -194,14 +195,15 @@
 
         // Delete old breakpoints from layouts-Object
         let layouts = Object.assign({}, this.layouts);
+        let margin = Object.assign({}, this.margin);
         let layoutEntries = Object.entries(layouts);
-        let breakpointEntries = Object.entries(this.breakpoints).sort((a,b) => a[1] - b[1]);
+        let breakpointEntries = Object.entries(this.breakpoints).sort((a, b) => a[1] - b[1]);
 
         for (let i = 0; i < layoutEntries.length; i++) {
 
           let breakpointKey = layoutEntries[i][0];
 
-          if(!this.breakpoints[breakpointKey]) {
+          if (!this.breakpoints[breakpointKey]) {
             delete layouts[breakpointKey];
           }
         }
@@ -210,14 +212,21 @@
 
           let breakpointKey = breakpointEntries[i][0];
 
-          if(!layouts[breakpointKey] && i-1 >= 0) {
-            let previousBreakpointKey = breakpointEntries[i-1][0];
-            let layout = JSON.parse(JSON.stringify(layouts[previousBreakpointKey]));
-            layouts[breakpointKey] = layout;
+          if (i - 1 >= 0) {
+
+            let previousBreakpointKey = breakpointEntries[i - 1][0];
+
+            if (!layouts[breakpointKey]) {
+              let layout = JSON.parse(JSON.stringify(layouts[previousBreakpointKey]));
+              layouts[breakpointKey] = layout;
+              margin[breakpointKey] = this.margin[previousBreakpointKey];
+            }
+
           }
         }
 
-        this.layouts = layouts;
+        this.$emit("update:layouts", layouts);
+        this.$emit("update:margin", margin);
 
         this.resizeEvent();
       },
@@ -374,7 +383,14 @@
         this.eventBus.$emit("compact");
         this.updateHeight();
 
-        this.$emit("data-updated", {currentColCount: this.currentColCount, rowHeight: this.rowHeight, lastBreakpoint: this.lastBreakpoint, currentMargin: this.currentMargin, layout: this.layout, cols: this.cols});
+        this.$emit("data-updated", {
+          currentColCount: this.currentColCount,
+          rowHeight: this.rowHeight,
+          lastBreakpoint: this.lastBreakpoint,
+          currentMargin: this.currentMargin,
+          layout: this.layout,
+          cols: this.cols
+        });
         if (eventName === 'resizeend') this.$emit('layout-updated', this.layout);
       },
     },
