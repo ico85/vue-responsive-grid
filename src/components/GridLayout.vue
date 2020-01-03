@@ -369,12 +369,12 @@
         this.calcColWidths();
 
         this.currentColCount = this.cols[this.lastBreakpoint];
-        console.log(this.currentColCount);
         this.rowHeight = ((this.width - (this.currentMargin * (this.currentColCount + 1))) / this.currentColCount) * this.itemRatio;
         compact(correctBounds(this.layout, this.currentColCount));
         this.eventBus.$emit("compact");
         this.updateHeight();
 
+        this.$emit("data-updated", this.currentColCount, this.rowHeight, this.lastBreakpoint, this.currentMargin, this.layout, this.currentColCount, this.cols);
         if (eventName === 'resizeend') this.$emit('layout-updated', this.layout);
       },
     },
