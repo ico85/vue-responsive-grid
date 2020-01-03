@@ -205,6 +205,7 @@
 
           if (!this.breakpoints[breakpointKey]) {
             delete layouts[breakpointKey];
+            delete margin[breakpointKey];
           }
         }
 
