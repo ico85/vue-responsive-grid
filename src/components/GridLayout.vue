@@ -225,7 +225,6 @@
         this.resizeEvent();
       },
       width: function (newWidth, oldWidth) {
-        this.rowHeight = ((this.width - (this.currentMargin * (this.currentColCount + 1))) / this.currentColCount) * this.itemRatio;
 
         this.$nextTick(() => {
           if (oldWidth === null) {
@@ -372,7 +371,7 @@
         this.layout = this.layouts[this.lastBreakpoint];
         this.currentColCount = this.cols[this.lastBreakpoint];
         this.currentMargin = this.margin[this.lastBreakpoint];
-
+        this.rowHeight = ((this.width - (this.currentMargin * (this.currentColCount + 1))) / this.currentColCount) * this.itemRatio;
         compact(correctBounds(this.layout, this.currentColCount));
         this.eventBus.$emit("compact");
         this.updateHeight();
