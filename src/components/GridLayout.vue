@@ -374,7 +374,7 @@
         this.eventBus.$emit("compact");
         this.updateHeight();
 
-        this.$emit("data-updated", this.currentColCount, this.rowHeight, this.lastBreakpoint, this.currentMargin, this.layout, this.currentColCount, this.cols);
+        this.$emit("data-updated", {currentColCount: this.currentColCount, rowHeight: this.rowHeight, lastBreakpoint: this.lastBreakpoint, currentMargin: this.currentMargin, layout: this.layout, cols: this.cols});
         if (eventName === 'resizeend') this.$emit('layout-updated', this.layout);
       },
     },
