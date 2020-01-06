@@ -128,7 +128,8 @@
 
       });
 
-      this.$on('remove-item', (itemId) => {
+      this.eventBus.$on('removeItem', (itemId) => {
+
         let layoutsClone = Object.assign({}, this.layouts);
 
         let layoutEntries = Object.entries(layoutsClone);
@@ -145,7 +146,7 @@
 
         this.$emit("update:layouts", layoutsClone);
 
-        this.$emit('item-removed', itemId);
+        this.$emit('itemRemoved', itemId);
 
       });
     },
@@ -153,6 +154,7 @@
       //Remove listeners
       this.eventBus.$off('resizeEvent', this.resizeEventHandler);
       this.eventBus.$off('dragEvent', this.dragEventHandler);
+      this.eventBus.$off('removeItem');
       this.eventBus.$destroy();
       removeWindowEventListener("resize", this.onWindowResize);
       this.erd.uninstall(this.$refs.item);
