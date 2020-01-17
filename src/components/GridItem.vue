@@ -33,7 +33,7 @@
   }
 
   .vue-grid-item.vue-grid-placeholder {
-    background: red;
+    background-color: #FF0000;
     opacity: 0.2;
     transition-duration: 100ms;
     z-index: 2;

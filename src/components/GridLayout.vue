@@ -345,6 +345,7 @@
         this.updateHeight();
         if (eventName === 'dragend') this.$emit('layout-updated', this.layout);
       },
+
       resizeEvent: function (eventName, id, x, y, h, w) {
 
         let l = getLayoutItem(this.layout, id);
@@ -374,6 +375,8 @@
           });
         }
 
+        let currentBreakpoint = this.lastBreakpoint;
+
         this.lastBreakpoint = this.getLastBreakpoint();
         this.currentMargin = this.margin[this.lastBreakpoint];
         this.layout = this.layouts[this.lastBreakpoint];
@@ -386,10 +389,24 @@
         this.eventBus.$emit("compact");
         this.updateHeight();
 
+
+        if(currentBreakpoint !== this.lastBreakpoint) {
+          this.$emit("breakpoint-change", {
+            currentColCount: this.currentColCount,
+            rowHeight: this.rowHeight,
+            lastBreakpoint: currentBreakpoint,
+            currentBreakpoint: this.lastBreakpoint,
+            currentMargin: this.currentMargin,
+            layout: this.layout,
+            cols: this.cols
+          });
+        }
+
         this.$emit("data-updated", {
           currentColCount: this.currentColCount,
           rowHeight: this.rowHeight,
-          lastBreakpoint: this.lastBreakpoint,
+          lastBreakpoint: currentBreakpoint,
+          currentBreakpoint: this.lastBreakpoint,
           currentMargin: this.currentMargin,
           layout: this.layout,
           cols: this.cols
