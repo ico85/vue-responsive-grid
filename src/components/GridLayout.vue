@@ -217,24 +217,6 @@
 
         this.calcMaxColsWidths();
 
-        if (this.cols) {
-          let cols = Object.assign({}, this.cols);
-          let colEntries = Object.entries(this.cols);
-
-          colEntries.forEach((colEntry) => {
-            let breakpointLabel = colEntry[0];
-            let colCount = colEntry[1];
-
-            if (colCount > this.maxCols[breakpointLabel]) {
-              cols[breakpointLabel] = this.maxCols[breakpointLabel];
-            }
-
-          });
-
-          this.$emit("update:cols", cols);
-
-        }
-
         this.resizeEvent();
       },
       breakpoints() {
@@ -347,6 +329,24 @@
         }
 
         this.maxCols = maxCols;
+
+        if (this.cols) {
+          let cols = Object.assign({}, this.cols);
+          let colEntries = Object.entries(this.cols);
+
+          colEntries.forEach((colEntry) => {
+            let breakpointLabel = colEntry[0];
+            let colCount = colEntry[1];
+
+            if (colCount > this.maxCols[breakpointLabel]) {
+              cols[breakpointLabel] = this.maxCols[breakpointLabel];
+            }
+
+          });
+
+          this.$emit("update:cols", cols);
+
+        }
 
       },
 
