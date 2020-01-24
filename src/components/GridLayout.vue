@@ -221,6 +221,7 @@
       },
       breakpoints() {
 
+        console.log("breakpoints changed");
         // Delete old breakpoints from layouts-Object
         let layouts = Object.assign({}, this.layouts);
         let margin = Object.assign({}, this.margin);
@@ -262,7 +263,6 @@
         this.$emit("update:cols", cols);
 
         this.calcMaxColsWidths();
-
         this.resizeEvent();
       },
       width: function (newWidth, oldWidth) {
@@ -426,6 +426,8 @@
 
         this.lastBreakpoint = this.getLastBreakpoint();
         this.currentMargin = this.margin[this.lastBreakpoint];
+
+        console.log("current margin in resizeevent", this.currentMargin);
         this.layout = this.layouts[this.lastBreakpoint];
 
         this.currentColCount = this.cols[this.lastBreakpoint];

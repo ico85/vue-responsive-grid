@@ -6000,12 +6000,12 @@ var component = normalizeComponent(
 )
 
 /* harmony default export */ var GridItem = (component.exports);
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"53bd254a-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/GridLayout.vue?vue&type=template&id=7b691224&
-var GridLayoutvue_type_template_id_7b691224_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{ref:"item",staticClass:"vue-grid-layout",style:(_vm.mergedStyle)},[_vm._t("default"),_c('grid-item',{directives:[{name:"show",rawName:"v-show",value:(_vm.isDragging),expression:"isDragging"}],staticClass:"vue-grid-placeholder",attrs:{"x":_vm.placeholder.x,"y":_vm.placeholder.y,"w":_vm.placeholder.w,"h":_vm.placeholder.h,"i":_vm.placeholder.i}})],2)}
-var GridLayoutvue_type_template_id_7b691224_staticRenderFns = []
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"53bd254a-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/GridLayout.vue?vue&type=template&id=4a6f5a7a&
+var GridLayoutvue_type_template_id_4a6f5a7a_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{ref:"item",staticClass:"vue-grid-layout",style:(_vm.mergedStyle)},[_vm._t("default"),_c('grid-item',{directives:[{name:"show",rawName:"v-show",value:(_vm.isDragging),expression:"isDragging"}],staticClass:"vue-grid-placeholder",attrs:{"x":_vm.placeholder.x,"y":_vm.placeholder.y,"w":_vm.placeholder.w,"h":_vm.placeholder.h,"i":_vm.placeholder.i}})],2)}
+var GridLayoutvue_type_template_id_4a6f5a7a_staticRenderFns = []
 
 
-// CONCATENATED MODULE: ./src/components/GridLayout.vue?vue&type=template&id=7b691224&
+// CONCATENATED MODULE: ./src/components/GridLayout.vue?vue&type=template&id=4a6f5a7a&
 
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es.array.some.js
 var es_array_some = __webpack_require__("45fc");
@@ -6306,7 +6306,8 @@ var elementResizeDetectorMaker = __webpack_require__("eec4");
       this.resizeEvent();
     },
     breakpoints: function breakpoints() {
-      // Delete old breakpoints from layouts-Object
+      console.log("breakpoints changed"); // Delete old breakpoints from layouts-Object
+
       var layouts = Object.assign({}, this.layouts);
       var margin = Object.assign({}, this.margin);
       var cols = Object.assign({}, this.cols);
@@ -6498,6 +6499,7 @@ var elementResizeDetectorMaker = __webpack_require__("eec4");
       var currentBreakpoint = this.lastBreakpoint;
       this.lastBreakpoint = this.getLastBreakpoint();
       this.currentMargin = this.margin[this.lastBreakpoint];
+      console.log("current margin in resizeevent", this.currentMargin);
       this.layout = this.layouts[this.lastBreakpoint];
       this.currentColCount = this.cols[this.lastBreakpoint];
       this.rowHeight = (this.width - this.currentMargin * (this.currentColCount + 1)) / this.currentColCount * this.itemRatio;
@@ -6546,8 +6548,8 @@ var GridLayoutvue_type_style_index_0_lang_css_ = __webpack_require__("e279");
 
 var GridLayout_component = normalizeComponent(
   components_GridLayoutvue_type_script_lang_js_,
-  GridLayoutvue_type_template_id_7b691224_render,
-  GridLayoutvue_type_template_id_7b691224_staticRenderFns,
+  GridLayoutvue_type_template_id_4a6f5a7a_render,
+  GridLayoutvue_type_template_id_4a6f5a7a_staticRenderFns,
   false,
   null,
   null,
