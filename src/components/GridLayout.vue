@@ -201,6 +201,10 @@
         this.erd.listenTo(this.$refs.item, () => {
           this.onWindowResize();
         });
+
+        this.$nextTick(() => {
+          this.$emit("mounted-and-resized");
+        });
       });
 
     },
@@ -275,6 +279,7 @@
       },
       layout: function () {
 
+        console.log("layout changd!");
         compact(correctBounds(this.layout, this.currentColCount));
         this.$emit("update:currentLayout", this.layout);
         this.updateHeight();
@@ -404,7 +409,6 @@
         this.lastBreakpoint = this.getLastBreakpoint();
         this.currentMargin = this.margin[this.lastBreakpoint];
         this.layout = this.layouts[this.lastBreakpoint];
-
 
         this.currentColCount = this.cols[this.lastBreakpoint];
         this.rowHeight = ((this.width - (this.currentMargin * (this.currentColCount + 1))) / this.currentColCount) * this.itemRatio;
