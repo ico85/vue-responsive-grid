@@ -11,6 +11,7 @@
                  :layouts.sync="layouts"
                  ref="gridLayout"
                  :margin.sync="margin"
+                 @mounted-and-resized="gridMountedAndResized"
                  :cols.sync="cols"
                  :breakpoints.sync="breakpoints">
 
@@ -41,7 +42,7 @@
         currentColCount: 2,
         margin: {lg: 10, md: 10, sm: 10, xs: 10, xxs: 10},
         cols: null,
-        currentLayout: [],
+        currentLayout: null,
         breakpoints: {lg: 1200, md: 996, sm: 768, xs: 480, xxs: 320},
         layouts: null,
         maxColCount: -1,
@@ -59,6 +60,10 @@
       }, 4000);
     },
     methods: {
+      gridMountedAndResized() {
+        console.log("mounted and resized yoar");
+        console.log(this.currentLayout);
+      },
       addGridItem() {
         this.$refs.gridLayout.$emit("add-item");
       }
