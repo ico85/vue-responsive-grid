@@ -68,6 +68,10 @@
           return {lg: 1200, md: 996, sm: 768, xs: 480, xxs: 0}
         }
       },
+      cols: {
+        type: Object,
+        default: null,
+      },
       margin: {
         type: Object,
         default: function () {
@@ -77,7 +81,6 @@
     },
     data() {
       return {
-        cols: {},
         rowHeight: 60,
         width: null,
         mergedStyle: {},
@@ -86,6 +89,7 @@
         currentMargin: null,
         lastBreakpoint: null,
         layout: [],
+        maxCols: {},
         placeholder: {
           x: 0,
           y: 0,
@@ -161,8 +165,15 @@
     },
     mounted: function () {
 
-      if(!this.layouts) {
-        let breakpointEntries = Object.entries(this.breakpoints);
+      console.log("mounted gridLayout");
+      // Calculate max column count for each breakpoint
+      this.calcMaxColsWidths();
+
+      // Build empty layouts from breakpoints
+      let breakpointEntries = Object.entries(this.breakpoints);
+
+      if (!this.layouts) {
+        console.log("building layouts");
         let layouts = {};
 
         for (let i = 0; i < breakpointEntries.length; i++) {
@@ -171,6 +182,11 @@
         }
 
         this.$emit("update:layouts", layouts);
+      }
+
+      // Initialize cols with max column counts if cols are empty
+      if (!this.cols) {
+        this.$emit("update:cols", Object.assign({}, this.maxCols));
       }
 
       this.$nextTick(() => {
@@ -190,7 +206,13 @@
     },
     watch: {
 
+      cols() {
+        this.resizeEvent();
+      },
       margin() {
+
+        this.calcMaxColsWidths();
+
         this.resizeEvent();
       },
       breakpoints() {
@@ -198,6 +220,7 @@
         // Delete old breakpoints from layouts-Object
         let layouts = Object.assign({}, this.layouts);
         let margin = Object.assign({}, this.margin);
+        let cols = Object.assign({}, this.cols);
         let layoutEntries = Object.entries(layouts);
         let breakpointEntries = Object.entries(this.breakpoints).sort((a, b) => a[1] - b[1]);
 
@@ -208,6 +231,7 @@
           if (!this.breakpoints[breakpointKey]) {
             delete layouts[breakpointKey];
             delete margin[breakpointKey];
+            delete cols[breakpointKey];
           }
         }
 
@@ -223,6 +247,7 @@
               let layout = JSON.parse(JSON.stringify(layouts[previousBreakpointKey]));
               layouts[breakpointKey] = layout;
               margin[breakpointKey] = this.margin[previousBreakpointKey];
+              cols[breakpointKey] = this.cols[previousBreakpointKey];
             }
 
           }
@@ -230,6 +255,9 @@
 
         this.$emit("update:layouts", layouts);
         this.$emit("update:margin", margin);
+        this.$emit("update:cols", cols);
+
+        this.calcMaxColsWidths();
 
         this.resizeEvent();
       },
@@ -271,13 +299,12 @@
         }
         return matching;
       },
-      calcColWidths() {
+      calcMaxColsWidths() {
 
         const minColWidth = 60;
 
         let breakpointEntries = Object.entries(this.breakpoints);
-        let margin = this.currentMargin;
-        let cols = {};
+        let maxCols = {};
 
         for (let i = 0; i < breakpointEntries.length; i++) {
 
@@ -289,17 +316,14 @@
 
           while (colWidth < minColWidth && colsCount >= 2) {
             colsCount--;
-            colWidth = (breakpointSize - (margin * (colsCount + 1))) / colsCount;
+            colWidth = (breakpointSize - (this.margin[breakpointLabel] * (colsCount + 1))) / colsCount;
           }
 
-          if (colsCount % 2 !== 0 && colsCount % 3 !== 0 && colsCount > 2) {
-            colsCount--;
-          }
+          maxCols[breakpointLabel] = colsCount;
 
-          cols[breakpointLabel] = colsCount;
         }
 
-        this.cols = cols;
+        this.maxCols = maxCols;
 
       },
 
@@ -381,7 +405,6 @@
         this.currentMargin = this.margin[this.lastBreakpoint];
         this.layout = this.layouts[this.lastBreakpoint];
 
-        this.calcColWidths();
 
         this.currentColCount = this.cols[this.lastBreakpoint];
         this.rowHeight = ((this.width - (this.currentMargin * (this.currentColCount + 1))) / this.currentColCount) * this.itemRatio;
@@ -390,7 +413,7 @@
         this.updateHeight();
 
 
-        if(currentBreakpoint !== this.lastBreakpoint) {
+        if (currentBreakpoint !== this.lastBreakpoint) {
           this.$emit("breakpoint-change", {
             currentColCount: this.currentColCount,
             rowHeight: this.rowHeight,

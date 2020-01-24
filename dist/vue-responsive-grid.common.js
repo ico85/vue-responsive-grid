@@ -1792,66 +1792,6 @@ module.exports = version && +version;
 
 /***/ }),
 
-/***/ "60da":
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-var DESCRIPTORS = __webpack_require__("83ab");
-var fails = __webpack_require__("d039");
-var objectKeys = __webpack_require__("df75");
-var getOwnPropertySymbolsModule = __webpack_require__("7418");
-var propertyIsEnumerableModule = __webpack_require__("d1e7");
-var toObject = __webpack_require__("7b0b");
-var IndexedObject = __webpack_require__("44ad");
-
-var nativeAssign = Object.assign;
-var defineProperty = Object.defineProperty;
-
-// `Object.assign` method
-// https://tc39.github.io/ecma262/#sec-object.assign
-module.exports = !nativeAssign || fails(function () {
-  // should have correct order of operations (Edge bug)
-  if (DESCRIPTORS && nativeAssign({ b: 1 }, nativeAssign(defineProperty({}, 'a', {
-    enumerable: true,
-    get: function () {
-      defineProperty(this, 'b', {
-        value: 3,
-        enumerable: false
-      });
-    }
-  }), { b: 2 })).b !== 1) return true;
-  // should work with symbols and should have deterministic property order (V8 bug)
-  var A = {};
-  var B = {};
-  // eslint-disable-next-line no-undef
-  var symbol = Symbol();
-  var alphabet = 'abcdefghijklmnopqrst';
-  A[symbol] = 7;
-  alphabet.split('').forEach(function (chr) { B[chr] = chr; });
-  return nativeAssign({}, A)[symbol] != 7 || objectKeys(nativeAssign({}, B)).join('') != alphabet;
-}) ? function assign(target, source) { // eslint-disable-line no-unused-vars
-  var T = toObject(target);
-  var argumentsLength = arguments.length;
-  var index = 1;
-  var getOwnPropertySymbols = getOwnPropertySymbolsModule.f;
-  var propertyIsEnumerable = propertyIsEnumerableModule.f;
-  while (argumentsLength > index) {
-    var S = IndexedObject(arguments[index++]);
-    var keys = getOwnPropertySymbols ? objectKeys(S).concat(getOwnPropertySymbols(S)) : objectKeys(S);
-    var length = keys.length;
-    var j = 0;
-    var key;
-    while (length > j) {
-      key = keys[j++];
-      if (!DESCRIPTORS || propertyIsEnumerable.call(S, key)) T[key] = S[key];
-    }
-  } return T;
-} : nativeAssign;
-
-
-/***/ }),
-
 /***/ "6547":
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -3933,21 +3873,6 @@ module.exports = function (it) {
 
 /***/ }),
 
-/***/ "cca6":
-/***/ (function(module, exports, __webpack_require__) {
-
-var $ = __webpack_require__("23e7");
-var assign = __webpack_require__("60da");
-
-// `Object.assign` method
-// https://tc39.github.io/ecma262/#sec-object.assign
-$({ target: 'Object', stat: true, forced: Object.assign !== assign }, {
-  assign: assign
-});
-
-
-/***/ }),
-
 /***/ "ce4e":
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -6000,18 +5925,15 @@ var component = normalizeComponent(
 )
 
 /* harmony default export */ var GridItem = (component.exports);
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"53bd254a-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/GridLayout.vue?vue&type=template&id=f4e5bebe&
-var GridLayoutvue_type_template_id_f4e5bebe_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{ref:"item",staticClass:"vue-grid-layout",style:(_vm.mergedStyle)},[_vm._t("default"),_c('grid-item',{directives:[{name:"show",rawName:"v-show",value:(_vm.isDragging),expression:"isDragging"}],staticClass:"vue-grid-placeholder",attrs:{"x":_vm.placeholder.x,"y":_vm.placeholder.y,"w":_vm.placeholder.w,"h":_vm.placeholder.h,"i":_vm.placeholder.i}})],2)}
-var GridLayoutvue_type_template_id_f4e5bebe_staticRenderFns = []
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"53bd254a-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/GridLayout.vue?vue&type=template&id=7cffcfc0&
+var GridLayoutvue_type_template_id_7cffcfc0_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{ref:"item",staticClass:"vue-grid-layout",style:(_vm.mergedStyle)},[_vm._t("default"),_c('grid-item',{directives:[{name:"show",rawName:"v-show",value:(_vm.isDragging),expression:"isDragging"}],staticClass:"vue-grid-placeholder",attrs:{"x":_vm.placeholder.x,"y":_vm.placeholder.y,"w":_vm.placeholder.w,"h":_vm.placeholder.h,"i":_vm.placeholder.i}})],2)}
+var GridLayoutvue_type_template_id_7cffcfc0_staticRenderFns = []
 
 
-// CONCATENATED MODULE: ./src/components/GridLayout.vue?vue&type=template&id=f4e5bebe&
+// CONCATENATED MODULE: ./src/components/GridLayout.vue?vue&type=template&id=7cffcfc0&
 
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es.array.some.js
 var es_array_some = __webpack_require__("45fc");
-
-// EXTERNAL MODULE: ./node_modules/core-js/modules/es.object.assign.js
-var es_object_assign = __webpack_require__("cca6");
 
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es.object.entries.js
 var es_object_entries = __webpack_require__("4fad");
@@ -6082,7 +6004,6 @@ function removeWindowEventListener(event
 
 
 
-
 //
 //
 //
@@ -6148,6 +6069,10 @@ var elementResizeDetectorMaker = __webpack_require__("eec4");
         };
       }
     },
+    cols: {
+      type: Object,
+      default: null
+    },
     margin: {
       type: Object,
       default: function _default() {
@@ -6163,7 +6088,6 @@ var elementResizeDetectorMaker = __webpack_require__("eec4");
   },
   data: function data() {
     return {
-      cols: {},
       rowHeight: 60,
       width: null,
       mergedStyle: {},
@@ -6172,6 +6096,7 @@ var elementResizeDetectorMaker = __webpack_require__("eec4");
       currentMargin: null,
       lastBreakpoint: null,
       layout: [],
+      maxCols: {},
       placeholder: {
         x: 0,
         y: 0,
@@ -6249,8 +6174,14 @@ var elementResizeDetectorMaker = __webpack_require__("eec4");
   mounted: function mounted() {
     var _this2 = this;
 
+    console.log("mounted gridLayout"); // Calculate max column count for each breakpoint
+
+    this.calcMaxColsWidths(); // Build empty layouts from breakpoints
+
+    var breakpointEntries = Object.entries(this.breakpoints);
+
     if (!this.layouts) {
-      var breakpointEntries = Object.entries(this.breakpoints);
+      console.log("building layouts");
       var layouts = {};
 
       for (var i = 0; i < breakpointEntries.length; i++) {
@@ -6259,6 +6190,11 @@ var elementResizeDetectorMaker = __webpack_require__("eec4");
       }
 
       this.$emit("update:layouts", layouts);
+    } // Initialize cols with max column counts if cols are empty
+
+
+    if (!this.cols) {
+      this.$emit("update:cols", Object.assign({}, this.maxCols));
     }
 
     this.$nextTick(function () {
@@ -6277,13 +6213,18 @@ var elementResizeDetectorMaker = __webpack_require__("eec4");
     });
   },
   watch: {
+    cols: function cols() {
+      this.resizeEvent();
+    },
     margin: function margin() {
+      this.calcMaxColsWidths();
       this.resizeEvent();
     },
     breakpoints: function breakpoints() {
       // Delete old breakpoints from layouts-Object
       var layouts = Object.assign({}, this.layouts);
       var margin = Object.assign({}, this.margin);
+      var cols = Object.assign({}, this.cols);
       var layoutEntries = Object.entries(layouts);
       var breakpointEntries = Object.entries(this.breakpoints).sort(function (a, b) {
         return a[1] - b[1];
@@ -6295,6 +6236,7 @@ var elementResizeDetectorMaker = __webpack_require__("eec4");
         if (!this.breakpoints[breakpointKey]) {
           delete layouts[breakpointKey];
           delete margin[breakpointKey];
+          delete cols[breakpointKey];
         }
       }
 
@@ -6308,12 +6250,15 @@ var elementResizeDetectorMaker = __webpack_require__("eec4");
             var layout = JSON.parse(JSON.stringify(layouts[previousBreakpointKey]));
             layouts[_breakpointKey] = layout;
             margin[_breakpointKey] = this.margin[previousBreakpointKey];
+            cols[_breakpointKey] = this.cols[previousBreakpointKey];
           }
         }
       }
 
       this.$emit("update:layouts", layouts);
       this.$emit("update:margin", margin);
+      this.$emit("update:cols", cols);
+      this.calcMaxColsWidths();
       this.resizeEvent();
     },
     width: function width(newWidth, oldWidth) {
@@ -6353,11 +6298,10 @@ var elementResizeDetectorMaker = __webpack_require__("eec4");
 
       return matching;
     },
-    calcColWidths: function calcColWidths() {
+    calcMaxColsWidths: function calcMaxColsWidths() {
       var minColWidth = 60;
       var breakpointEntries = Object.entries(this.breakpoints);
-      var margin = this.currentMargin;
-      var cols = {};
+      var maxCols = {};
 
       for (var i = 0; i < breakpointEntries.length; i++) {
         var colsCount = 40;
@@ -6367,17 +6311,13 @@ var elementResizeDetectorMaker = __webpack_require__("eec4");
 
         while (colWidth < minColWidth && colsCount >= 2) {
           colsCount--;
-          colWidth = (breakpointSize - margin * (colsCount + 1)) / colsCount;
+          colWidth = (breakpointSize - this.margin[breakpointLabel] * (colsCount + 1)) / colsCount;
         }
 
-        if (colsCount % 2 !== 0 && colsCount % 3 !== 0 && colsCount > 2) {
-          colsCount--;
-        }
-
-        cols[breakpointLabel] = colsCount;
+        maxCols[breakpointLabel] = colsCount;
       }
 
-      this.cols = cols;
+      this.maxCols = maxCols;
     },
     updateHeight: function updateHeight() {
       this.mergedStyle = {
@@ -6457,7 +6397,6 @@ var elementResizeDetectorMaker = __webpack_require__("eec4");
       this.lastBreakpoint = this.getLastBreakpoint();
       this.currentMargin = this.margin[this.lastBreakpoint];
       this.layout = this.layouts[this.lastBreakpoint];
-      this.calcColWidths();
       this.currentColCount = this.cols[this.lastBreakpoint];
       this.rowHeight = (this.width - this.currentMargin * (this.currentColCount + 1)) / this.currentColCount * this.itemRatio;
       compact(correctBounds(this.layout, this.currentColCount));
@@ -6505,8 +6444,8 @@ var GridLayoutvue_type_style_index_0_lang_css_ = __webpack_require__("e279");
 
 var GridLayout_component = normalizeComponent(
   components_GridLayoutvue_type_script_lang_js_,
-  GridLayoutvue_type_template_id_f4e5bebe_render,
-  GridLayoutvue_type_template_id_f4e5bebe_staticRenderFns,
+  GridLayoutvue_type_template_id_7cffcfc0_render,
+  GridLayoutvue_type_template_id_7cffcfc0_staticRenderFns,
   false,
   null,
   null,
