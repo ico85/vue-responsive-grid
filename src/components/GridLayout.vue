@@ -214,6 +214,27 @@
         this.resizeEvent();
       },
       margin() {
+
+        this.calcMaxColsWidths();
+
+        if (this.cols) {
+          let cols = Object.assign({}, this.cols);
+          let colEntries = Object.entries(this.cols);
+
+          colEntries.forEach((colEntry) => {
+            let breakpointLabel = colEntry[0];
+            let colCount = colEntry[1];
+
+            if (colCount > this.maxCols[breakpointLabel]) {
+              cols[breakpointLabel] = this.maxCols[breakpointLabel];
+            }
+
+          });
+
+          this.$emit("update:cols", cols);
+
+        }
+
         this.resizeEvent();
       },
       breakpoints() {
@@ -257,6 +278,8 @@
         this.$emit("update:layouts", layouts);
         this.$emit("update:margin", margin);
         this.$emit("update:cols", cols);
+
+        this.calcMaxColsWidths();
 
         this.resizeEvent();
       },
@@ -404,26 +427,6 @@
         this.lastBreakpoint = this.getLastBreakpoint();
         this.currentMargin = this.margin[this.lastBreakpoint];
         this.layout = this.layouts[this.lastBreakpoint];
-
-        this.calcMaxColsWidths();
-
-        if (this.cols) {
-          let cols = Object.assign({}, this.cols);
-          let colEntries = Object.entries(this.cols);
-
-          colEntries.forEach((colEntry) => {
-            let breakpointLabel = colEntry[0];
-            let colCount = colEntry[1];
-
-            if (colCount > this.maxCols[breakpointLabel]) {
-              cols[breakpointLabel] = this.maxCols[breakpointLabel];
-            }
-
-          });
-
-          this.$emit("update:cols", cols);
-
-        }
 
         this.currentColCount = this.cols[this.lastBreakpoint];
         this.rowHeight = ((this.width - (this.currentMargin * (this.currentColCount + 1))) / this.currentColCount) * this.itemRatio;
