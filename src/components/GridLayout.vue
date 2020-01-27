@@ -277,7 +277,7 @@
       },
       calcColWidths() {
 
-        const minColWidth = 60;
+        const minColWidth = 50;
 
         let breakpointEntries = Object.entries(this.breakpoints);
 
