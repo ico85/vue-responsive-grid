@@ -280,7 +280,7 @@
         const minColWidth = 60;
 
         let breakpointEntries = Object.entries(this.breakpoints);
-        let margin = this.currentMargin;
+
         let cols = {};
 
         for (let i = 0; i < breakpointEntries.length; i++) {
@@ -293,7 +293,7 @@
 
           while (colWidth < minColWidth && colsCount >= 2) {
             colsCount--;
-            colWidth = (breakpointSize - (margin * (colsCount + 1))) / colsCount;
+            colWidth = (breakpointSize - (this.margin[breakpointLabel] * (colsCount + 1))) / colsCount;
           }
 
           if (colsCount % 2 !== 0 && colsCount % 3 !== 0 && colsCount > 2) {
