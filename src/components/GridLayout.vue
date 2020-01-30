@@ -1,3 +1,4 @@
+<script src="../../dist/vue-responsive-grid.common.js"></script>
 <template>
   <div ref="item" class="vue-grid-layout" :style="mergedStyle">
     <slot></slot>
