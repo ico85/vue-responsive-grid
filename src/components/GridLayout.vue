@@ -20,7 +20,7 @@
   }
 </style>
 <script>
-  import Vue from 'vue';
+  //import Vue from 'vue';
 
   var elementResizeDetectorMaker = require("element-resize-detector");
 
