@@ -302,11 +302,11 @@
           pos.width = this.resizing.width;
           pos.height = this.resizing.height;
 
-          this.$emit("size-update", {gridItem: this, width: pos.width, height: pos.height});
+          this.$emit("size-update",{gridItem: this, width: pos.width, height: pos.height});
 
           if (this.$el.matches(".vue-grid-placeholder")) {
-            this.$emit("placeholder-size-update", {gridItem: this, width: pos.width, height: pos.height});
-          }ƒ
+            this.$emit("placeholder-size-update",{gridItem: this, width: pos.width, height: pos.height});
+          }
         }
 
         this.style = setTransform(pos.top, pos.left, pos.width, pos.height);
