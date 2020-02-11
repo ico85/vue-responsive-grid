@@ -4711,12 +4711,12 @@ if (typeof window !== 'undefined') {
 // Indicate to webpack that this file can be concatenated
 /* harmony default export */ var setPublicPath = (null);
 
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"10d6e228-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/GridItem.vue?vue&type=template&id=40243f1e&
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"10d6e228-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/GridItem.vue?vue&type=template&id=775fb290&
 var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{ref:"item",staticClass:"vue-grid-item",class:_vm.classObj,style:(_vm.style)},[_vm._t("default"),(_vm.resizable)?_c('span',{ref:"handle",class:_vm.resizableHandleClass}):_vm._e()],2)}
 var staticRenderFns = []
 
 
-// CONCATENATED MODULE: ./src/components/GridItem.vue?vue&type=template&id=40243f1e&
+// CONCATENATED MODULE: ./src/components/GridItem.vue?vue&type=template&id=775fb290&
 
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es.array.index-of.js
 var es_array_index_of = __webpack_require__("c975");
@@ -5572,18 +5572,8 @@ var interact = __webpack_require__("fb3a");
       if (this.isResizing) {
         pos.width = this.resizing.width;
         pos.height = this.resizing.height;
-        this.$emit("size-update", {
-          gridItem: this,
-          width: pos.width,
-          height: pos.height
-        });
       }
 
-      this.$emit("styles-update", {
-        gridItem: this,
-        width: pos.width,
-        height: pos.height
-      });
       this.style = setTransform(pos.top, pos.left, pos.width, pos.height);
     },
     handleResize: function handleResize(event) {
@@ -5665,7 +5655,10 @@ var interact = __webpack_require__("fb3a");
 
       this.lastW = x;
       this.lastH = y;
-      this.$emit("resize", this, this.i, pos.h, pos.w, newSize.height, newSize.width);
+
+      if (this.innerW !== pos.w || this.innerH !== pos.h) {
+        this.$emit("resize", this, this.i, pos.h, pos.w, newSize.height, newSize.width);
+      }
 
       if (event.type === "resizeend") {
         this.$emit("resized", this, this.i, pos.h, pos.w, newSize.height, newSize.width);
@@ -6000,12 +5993,12 @@ var component = normalizeComponent(
 )
 
 /* harmony default export */ var GridItem = (component.exports);
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"10d6e228-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/GridLayout.vue?vue&type=template&id=c1d5fefe&
-var GridLayoutvue_type_template_id_c1d5fefe_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{ref:"item",staticClass:"vue-grid-layout",style:(_vm.mergedStyle)},[_vm._t("default"),_c('grid-item',{directives:[{name:"show",rawName:"v-show",value:(_vm.isDragging),expression:"isDragging"}],staticClass:"vue-grid-placeholder",attrs:{"x":_vm.placeholder.x,"y":_vm.placeholder.y,"w":_vm.placeholder.w,"h":_vm.placeholder.h,"i":_vm.placeholder.i},on:{"styles-update":_vm.onPlaceholderUpdate}})],2)}
-var GridLayoutvue_type_template_id_c1d5fefe_staticRenderFns = []
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"10d6e228-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/GridLayout.vue?vue&type=template&id=c3649326&
+var GridLayoutvue_type_template_id_c3649326_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{ref:"item",staticClass:"vue-grid-layout",style:(_vm.mergedStyle)},[_vm._t("default"),_c('grid-item',{directives:[{name:"show",rawName:"v-show",value:(_vm.isDragging),expression:"isDragging"}],staticClass:"vue-grid-placeholder",attrs:{"x":_vm.placeholder.x,"y":_vm.placeholder.y,"w":_vm.placeholder.w,"h":_vm.placeholder.h,"i":_vm.placeholder.i}})],2)}
+var GridLayoutvue_type_template_id_c3649326_staticRenderFns = []
 
 
-// CONCATENATED MODULE: ./src/components/GridLayout.vue?vue&type=template&id=c1d5fefe&
+// CONCATENATED MODULE: ./src/components/GridLayout.vue?vue&type=template&id=c3649326&
 
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es.array.some.js
 var es_array_some = __webpack_require__("45fc");
@@ -6080,7 +6073,6 @@ function removeWindowEventListener(event
 
 
 
-//
 //
 //
 //
@@ -6346,13 +6338,6 @@ var elementResizeDetectorMaker = __webpack_require__("eec4");
     }
   },
   methods: {
-    onPlaceholderUpdate: function onPlaceholderUpdate(data) {
-      if (data.height > 0 && data.width > 0 && (this.lastPlaceholderWidth !== data.width || this.lastPlaceholderHeight !== data.height)) {
-        this.$emit("placeholder-update", data);
-        this.lastPlaceholderWidth = data.width;
-        this.lastPlaceholderHeight = data.height;
-      }
-    },
     getLastBreakpoint: function getLastBreakpoint() {
       var sorted = sortBreakpoints(this.breakpoints);
       var matching = sorted[0];
@@ -6515,8 +6500,8 @@ var GridLayoutvue_type_style_index_0_lang_css_ = __webpack_require__("e279");
 
 var GridLayout_component = normalizeComponent(
   components_GridLayoutvue_type_script_lang_js_,
-  GridLayoutvue_type_template_id_c1d5fefe_render,
-  GridLayoutvue_type_template_id_c1d5fefe_staticRenderFns,
+  GridLayoutvue_type_template_id_c3649326_render,
+  GridLayoutvue_type_template_id_c3649326_staticRenderFns,
   false,
   null,
   null,

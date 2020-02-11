@@ -300,12 +300,8 @@
         if (this.isResizing) {
           pos.width = this.resizing.width;
           pos.height = this.resizing.height;
-
-          this.$emit("size-update", {gridItem: this, width: pos.width, height: pos.height});
-
         }
 
-        this.$emit("styles-update", {gridItem: this, width: pos.width, height: pos.height});
         this.style = setTransform(pos.top, pos.left, pos.width, pos.height);
 
       },
@@ -375,7 +371,9 @@
         this.lastW = x;
         this.lastH = y;
 
-        this.$emit("resize", this, this.i, pos.h, pos.w, newSize.height, newSize.width);
+        if (this.innerW !== pos.w || this.innerH !== pos.h) {
+          this.$emit("resize", this, this.i, pos.h, pos.w, newSize.height, newSize.width);
+        }
 
         if (event.type === "resizeend") {
           this.$emit("resized", this, this.i, pos.h, pos.w, newSize.height, newSize.width);
