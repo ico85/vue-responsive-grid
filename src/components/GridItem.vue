@@ -173,13 +173,13 @@
         this.createStyle();
       };
 
-      this.setDraggableHandler = (isDraggable) =>  {
+      this.setDraggableHandler = (isDraggable) => {
         if (this.isDraggable === null) {
           this.draggable = isDraggable;
         }
       };
 
-      this.setResizableHandler = (isResizable)  => {
+      this.setResizableHandler = (isResizable) => {
         if (this.isResizable === null) {
           this.resizable = isResizable;
         }
@@ -370,9 +370,8 @@
         this.lastW = x;
         this.lastH = y;
 
-        if (this.innerW !== pos.w || this.innerH !== pos.h) {
-          this.$emit("resize", this, this.i, pos.h, pos.w, newSize.height, newSize.width);
-        }
+        this.$emit("resize", this, this.i, pos.h, pos.w, newSize.height, newSize.width);
+
         if (event.type === "resizeend") {
           this.$emit("resized", this, this.i, pos.h, pos.w, newSize.height, newSize.width);
         }
