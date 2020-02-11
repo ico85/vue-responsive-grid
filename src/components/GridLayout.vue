@@ -370,7 +370,7 @@
           this.placeholder.w = l.w;
           this.placeholder.h = l.h;
 
-          this.$emit("placeholder-resize", {width: this.placeholder.w, height: this.placeholder.h});
+          this.$emit("placeholder-resize", {id: id, width: this.placeholder.w, height: this.placeholder.h});
 
           this.$nextTick(function () {
             this.isDragging = true;
