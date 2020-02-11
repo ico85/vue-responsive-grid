@@ -305,7 +305,7 @@
 
         }
 
-        this.$emit("grid-item-styles-update", {gridItem: this, width: pos.width, height: pos.height});
+        this.$emit("styles-update", {gridItem: this, width: pos.width, height: pos.height});
         this.style = setTransform(pos.top, pos.left, pos.width, pos.height);
 
       },

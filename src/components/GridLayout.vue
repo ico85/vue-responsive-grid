@@ -4,6 +4,7 @@
     <slot></slot>
     <grid-item class="vue-grid-placeholder"
                v-show="isDragging"
+               @styles-update="onPlaceholderUpdate"
                :x="placeholder.x"
                :y="placeholder.y"
                :w="placeholder.w"
@@ -265,6 +266,9 @@
     },
     methods: {
 
+      onPlaceholderUpdate(data) {
+        this.$emit("placeholder-update", data);
+      },
       getLastBreakpoint() {
 
         const sorted = sortBreakpoints(this.breakpoints);
