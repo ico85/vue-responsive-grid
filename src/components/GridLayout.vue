@@ -88,6 +88,8 @@
         currentMargin: null,
         lastBreakpoint: null,
         layout: [],
+        lastPlaceholderWidth: null,
+        lastPlaceholderHeight: null,
         placeholder: {
           x: 0,
           y: 0,
@@ -267,7 +269,12 @@
     methods: {
 
       onPlaceholderUpdate(data) {
-        this.$emit("placeholder-update", data);
+
+        if(data.height > 0 && data.width > 0 && (this.lastPlaceholderWidth !== data.width || this.lastPlaceholderHeight !== data.height)) {
+          this.$emit("placeholder-update", data);
+          this.lastPlaceholderWidth = data.width;
+          this.lastPlaceholderHeight = data.height;
+        }
       },
       getLastBreakpoint() {
 
