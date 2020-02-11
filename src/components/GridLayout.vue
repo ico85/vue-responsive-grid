@@ -3,6 +3,7 @@
   <div ref="item" class="vue-grid-layout" :style="mergedStyle">
     <slot></slot>
     <grid-item class="vue-grid-placeholder"
+               @size-update="placeholderSizeUpdate"
                v-show="isDragging"
                :x="placeholder.x"
                :y="placeholder.y"
@@ -265,6 +266,9 @@
     },
     methods: {
 
+      placeholderSizeUpdate(data) {
+        this.$emit("placeholder-size-update", data);
+      },
       getLastBreakpoint() {
 
         const sorted = sortBreakpoints(this.breakpoints);
