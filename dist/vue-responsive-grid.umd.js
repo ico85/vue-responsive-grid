@@ -4720,12 +4720,12 @@ if (typeof window !== 'undefined') {
 // Indicate to webpack that this file can be concatenated
 /* harmony default export */ var setPublicPath = (null);
 
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"10d6e228-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/GridItem.vue?vue&type=template&id=701eaf0a&
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"10d6e228-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/GridItem.vue?vue&type=template&id=1b08c594&
 var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{ref:"item",staticClass:"vue-grid-item",class:_vm.classObj,style:(_vm.style)},[_vm._t("default"),(_vm.resizable)?_c('span',{ref:"handle",class:_vm.resizableHandleClass}):_vm._e()],2)}
 var staticRenderFns = []
 
 
-// CONCATENATED MODULE: ./src/components/GridItem.vue?vue&type=template&id=701eaf0a&
+// CONCATENATED MODULE: ./src/components/GridItem.vue?vue&type=template&id=1b08c594&
 
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es.array.index-of.js
 var es_array_index_of = __webpack_require__("c975");
@@ -5669,7 +5669,7 @@ var interact = __webpack_require__("fb3a");
         this.$emit("resize", this, this.i, pos.h, pos.w, newSize.height, newSize.width);
       }
 
-      if (event.type === "resizeend" && (this.previousW !== this.innerW || this.previousH !== this.innerH)) {
+      if (event.type === "resizeend") {
         this.$emit("resized", this, this.i, pos.h, pos.w, newSize.height, newSize.width);
       }
 
