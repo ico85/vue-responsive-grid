@@ -242,7 +242,7 @@
         this.innerH = newVal
         this.createStyle();
 
-        this.$emit("height-update", )
+        this.$emit("height-update",)
       },
       w: function (newVal) {
         this.innerW = newVal;
@@ -303,6 +303,10 @@
           pos.height = this.resizing.height;
 
           this.$emit("size-update", {gridItem: this, width: pos.width, height: pos.height});
+
+          if (this.$el.matches(".vue-grid-placeholder")) {
+            this.$emit("placeholder-size-update", {gridItem: this, width: pos.width, height: pos.height});
+          }ƒ
         }
 
         this.style = setTransform(pos.top, pos.left, pos.width, pos.height);
