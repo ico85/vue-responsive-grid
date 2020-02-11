@@ -241,6 +241,8 @@
       h: function (newVal) {
         this.innerH = newVal
         this.createStyle();
+
+        this.$emit("height-update", )
       },
       w: function (newVal) {
         this.innerW = newVal;
@@ -299,6 +301,8 @@
         if (this.isResizing) {
           pos.width = this.resizing.width;
           pos.height = this.resizing.height;
+
+          this.$emit("size-update", {gridItem: this, width: pos.width, height: pos.height});
         }
 
         this.style = setTransform(pos.top, pos.left, pos.width, pos.height);
